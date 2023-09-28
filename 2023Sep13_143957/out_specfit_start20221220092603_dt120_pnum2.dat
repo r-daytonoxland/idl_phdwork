@@ -1,0 +1,15 @@
+Results from specfit, run started at Wed Sep 13 14:39:57 2023, with following parameters:
+Panel number: 2
+Integration time of each spectrum: 120s
+File containing emission lines to fit: $HDIR/input_fit_lines_Tnpanel_v4.dat
+OH lines used to determine TOH:  OH(8-3)P1(2) OH(8-3)P1(3) OH(8-3)P1(4) OH(8-3)P1(5) OH(8-3)P2(4) OH(8-3)P2(2) OH(8-3)P2(3) OH(8-3)P2(5)
+errortag labels:
+    p, n, N: bad PWV fit
+    v: bad P1 variance
+    t: bad P2 variance
+    f: failed fit
+Banding correction type = 1
+mjs         dd  mo    yr  hh min sec dt[s] TOH[K] sigT[K] PWV[mm] IOp7320[R]   IOp7330[R]     ROp   TN2[K]  IN2[R/A]  IOH[R] TO2+[K] IO2+[R/A]  ROpup    ROplow   back[R/A]  errortag  fftpeak
+2302680363  20  12  2022   9  26   3   120  187.76   21.49    0.0     299.01     242.98       1.231  1002.8    8.18    48.4     0.0    0.00   0.00379   0.03671   14.59  N       0
+2302680483  20  12  2022   9  28   3   120  174.93   18.97   10.7     334.76     276.98       1.209  1130.0    6.32    47.9     0.0    0.00   0.00373   0.03110   15.47  -       0
+2302680603  20  12  2022   9  30   3   120  184.53   21.56    0.0     367.39     304.75       1.206  1130.0    7.56    51.8     0.0    0.00   0.00314   0.02813   15.12  n       0
