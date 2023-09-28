@@ -78,17 +78,17 @@ pro extract_datetime, input_string, datetime
 ; Input string in the 'dd/mm/yyyy hh:mm:ss' format
 
 ; Split the string into date and time components
-date_time_components = StrSplit(input_string, ' ')
+date_time_components = input_string.Split(' ')
 
 ; Extract date components
-date_components = StrSplit(date_time_components[0], '/')
+date_components = date_time_components[0].Split('/')
 
 day = Long(date_components[0])
 month = Long(date_components[1])
 year = Long(date_components[2])
 
 ; Extract time components
-time_components = StrSplit(date_time_components[1], ':')
+time_components = date_time_components[1].split(':')
 
 hour = Long(time_components[0])
 minute = Long(time_components[1])
