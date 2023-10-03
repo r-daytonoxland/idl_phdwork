@@ -14,16 +14,20 @@ b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
 ;Reading in data...
 for i = 0, b-1 do begin
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, int = interval_length
+        if keyword_set(intensity) then begin
+        endif
+        if keyword_set(blueshift) then begin
+        endif
+        if keyword_set(temperature) then begin
+        endif
 endfor
 
 ;Getting panel...
-a = size(time)
-dim = a[1]          ; The length of time in 1/2 second steps
-nosteps = dim / 120   ; Number of minutes-1 
-get_p, mjs0, dseq, 3, panel, /percentff
+; a = size(time)
+; dim = a[1]          ; The length of time in 1/2 second steps
+; nosteps = dim / 120   ; Number of minutes-1 
 
 ;Integrating in spatial direction...
-slice, panel, space_integrated, scount, slice=[0.5, 0.3]
 ;peakint = total(space_integrated[*,210:270], 2)
 ;peakint = peakint/120. ; mean
 
@@ -63,8 +67,17 @@ endfor
 
 end
 
-pro proton_intensity
-;
+pro proton_intensity, mjs0, dseq, result
+; Calculates the intensity of the peak of the proton spectrum (assume pnum = 3) from index 210:270 (works for 2021 season)
+; Inputs
+;       mjs0 (int) : The mjs value from read_tim
+;       dseq (array) : The dseq from read_tim
+; Outputs
+;       result (float): The integrated peak intensity
+
+get_p, mjs0, dseq, 3, panel, /percentff
+slice, panel, space_integrated, scount, slice=[0.5, 0.3]
+result = total(space_integrated[*, 210:270], 2)
 
 end
 
