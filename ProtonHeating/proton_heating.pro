@@ -8,8 +8,13 @@ pro create_timeseries, panel, start, interval_length, total_length, intensity=in
 extract_datetime, start, datetime
 intervals, datetime, interval_length, total_length, start_times
 
+a = size(start_times)
+b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
+
 ;Reading in data...
-read_tim, start, interval_length / 3600., mjs0, time, dseq, icount, /nophot, int = interval_length
+for i = 0, b-1 do begin
+        read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, int = interval_length
+endfor
 
 ;Getting panel...
 a = size(time)
