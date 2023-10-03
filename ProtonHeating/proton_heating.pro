@@ -15,13 +15,25 @@ b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
 for i = 0, b-1 do begin
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
         if keyword_set(intensity) then begin
+                fname_maker, start, 'intensity', 'txt', fname
                 proton_intensity, mjs0, dseq, intensity
+                openw, 1, fname, /append
+                printf, 1, intensity
+                close, 1
         endif
         if keyword_set(blueshift) then begin
-                proton_blueshift
+                fname_maker, start, 'blueshift', 'txt', fname
+                proton_blueshift, blueshift
+                openw, 1, fname, /append
+                printf, 1, blueshift
+                close, 1
         endif
         if keyword_set(temperature) then begin
-                oh_temperature
+                fname_maker, start, 'temperature', 'txt', fname
+                oh_temperature, temperature
+                openw, 1, fname, /append
+                printf, 1, temperature
+                close, 1
         endif
 
 endfor
@@ -144,8 +156,20 @@ endfor
 
 end
 
-pro fname_maker, time_string, datatype, fname
+pro fname_maker, time_string, result_type, file_suffix, fname
+; Generates a filename from the starting input string (time) and the result eg 'intensity' or 'spectrum'
+; Inputs
+;       time_string (string) : The start time of the data in 'dd/mm/yyyy hh:mm:ss' form
+;       result_type (string) : A string describing the contents of the file e.g. 'spectrum'
+;       file_suffix (string) : The file type suffix e.g. 'txt'
+; Outputs
+;       fname (string) : Hopefully a suitable, standard filename for your result
 
-fname = 
+extract_datetime, time_string, datetime
+
+dt = string(datetime)
+
+fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + '.' + file_suffix
+fname = fname.compress()
 
 end
