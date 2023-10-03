@@ -13,13 +13,17 @@ b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
 
 ;Reading in data...
 for i = 0, b-1 do begin
-        read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, int = interval_length
+        read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
         if keyword_set(intensity) then begin
+                proton_intensity, mjs0, dseq, intensity
         endif
         if keyword_set(blueshift) then begin
+                proton_blueshift
         endif
         if keyword_set(temperature) then begin
+                oh_temperature
         endif
+
 endfor
 
 ;Getting panel...
@@ -137,5 +141,11 @@ for i = 0 ,number_intervals - 1 do begin
 	dat2str, startimemjs, startimestr, /other
 	start_times[i] = startimestr
 endfor
+
+end
+
+pro fname_maker, time_string, datatype, fname
+
+fname = 
 
 end
