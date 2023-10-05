@@ -18,15 +18,16 @@ pnum = 3
 get_p, mjs0, dseq, pnum, panel, /percentff
 get_w, mjs0, pnum, wl
 slice, panel, space_integrated, scount
-peak = space_integrated[timeindices[0]:timeindices[1],210:270]
-; a = size(peak)
-; b = a[1]
-; pp holds ithe wavelength [0,*] and intensity [1,*] of the spectrum at 'time' [i]
-pp = fltarr(2, 61)
-pp[0,*] = wl[210:270]
+peak = space_integrated[210:270]
+wls = wl[210:270]
 
-pp[1,*] = peak[j,*]
-centre = total(pp[1,*] * pp[0,*])/total(pp[1,*])
+; Compensates for calibration fuck up.. badly
+peak -= mean(peak)
+peak = -peak
+for i=0,60 do if peak[i] le 0 then peak[i] = 0
+; UPDATE this and make it not shite
+
+centre = total(peak * wls)/total(peak)
 blueshift = 6562.81 - centre
 
 end
