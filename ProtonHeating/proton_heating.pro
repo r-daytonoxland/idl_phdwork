@@ -1,10 +1,10 @@
 pro proton_intensity, mjs0, dseq, result
 ; Calculates the intensity of the peak of the proton spectrum (assume pnum = 3) from index 210:270 (works for 2021 season)
 ; Inputs
-;       mjs0 (int) : The mjs value from read_tim
-;       dseq (array) : The dseq from read_tim
+;       mjs0 (double) : The mjs value from read_tim
+;       dseq (float array) : The dseq from read_tim
 ; Outputs
-;       result (float): The integrated peak intensity
+;       result (double): The integrated peak intensity
 
 get_p, mjs0, dseq, 3, panel, /percentff
 slice, panel, space_integrated, scount, slice=[0.5, 0.3]
@@ -13,7 +13,13 @@ result = total(space_integrated[*, 210:270], 2)
 end
 
 pro proton_blueshift, mjs0, dseq, blueshift
-;
+; Calculates the blueshift as the wavelength difference from the proton profile COM from the rest Halpha wavelength
+; Inputs
+;       mjs0 (double) : Ths mjs value from read_tim
+;       dseq (float array) : The dseq from read_tim
+; Outputs
+;       blueshift (double): The integrated peak intensity
+
 pnum = 3
 get_p, mjs0, dseq, pnum, panel, /percentff
 get_w, mjs0, pnum, wl
@@ -21,7 +27,7 @@ slice, panel, space_integrated, scount
 peak = space_integrated[210:270]
 wls = wl[210:270]
 
-; Compensates for calibration fuck up.. badly
+; Compensates for calibration fuck up... but badly
 peak -= mean(peak)
 peak = -peak
 for i=0,60 do if peak[i] le 0 then peak[i] = 0
@@ -38,8 +44,11 @@ pro oh_temperature
 end
 
 pro extract_datetime, input_string, datetime
-
-; Input string in the 'dd/mm/yyyy hh:mm:ss' format
+; Gets a datetime array out of a read_tim style datetime string
+; Inputs
+;       input_string (string) : datetime in the 'dd/mm/yyyy hh:mm:ss' format
+; Outputs
+;       datetime (array) : datetime in array form [yyyy, mm, dd, hh, mm, ss]
 
 ; Split the string into date and time components
 date_time_components = input_string.Split(' ')
@@ -63,7 +72,6 @@ datetime = [year, month, day, hour, minute, second]
 end
 
 pro intervals, datetime, interval_length, total_length, start_times
-
 ;Splits a longer time into intervals and returns the start of each interval in 'dd/mm/yyyy hh:mm:ss' format
 ; Inputs-
 ;       Datetime (array(integers)) : Output from extract_datetime, array with [year, month, day, hour, minute, second]
