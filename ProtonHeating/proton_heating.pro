@@ -39,7 +39,18 @@ blueshift = 6562.81 - centre
 end
 
 pro oh_temperature
-;
+; Currently a bunch of stuff from one of Dan's stuff.pros
+; Inputs
+; Outputs
+
+; Initialise
+h_setup
+read_lut
+
+av=reform(total(dseq,1)/double(n_elements(time)),[1,512,512])
+spectra,2,mjs0,time[0],av,sp
+get_w,mjs0,2,wl
+specfit,mjs0+(indgen(3)*120),120d,Nspec,pnum,linefile,Tlinelist,N2file=N2file,dir=dir,/correct_banding
 
 end
 
