@@ -38,7 +38,7 @@ blueshift = 6562.81 - centre
 
 end
 
-pro oh_temperature
+pro oh_temperature, mjs0, time, dseq, toh
 ; Currently a bunch of stuff from one of Dan's stuff.pros
 ; Inputs
 ; Outputs
@@ -55,7 +55,8 @@ av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512])
 spectra, 2, mjs0, time[0], av, sp
 get_w, mjs0, 2, wl
 
-retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,/plot,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
+;retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,/plot,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
+retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
 
 end
 
@@ -141,6 +142,8 @@ intervals, datetime, interval_length, total_length, start_times
 a = size(start_times)
 b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
 
+fname_maker, start, 'datatype', 'txt', fname_gen
+
 ;Reading in data...
 for i = 0, b-1 do begin
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
@@ -160,15 +163,15 @@ for i = 0, b-1 do begin
         endif
         if keyword_set(temperature) then begin
                 fname_maker, start, 'temperature', 'txt', fname
-                oh_temperature, temperature
+                oh_temperature, mjs0, time, dseq, toh
                 openw, 1, fname, /append
-                printf, 1, temperature
+                printf, 1, toh
                 close, 1
         endif
 
 endfor
 
-print, ' Files saved at ' + fname
+print, ' Files saved at ' + fname_gen
 
 ;Getting panel...
 ; a = size(time)
