@@ -129,7 +129,7 @@ fname = fname.compress()
 
 end
 
-pro create_timeseries, panel, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature
+pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature
 
 ; Creates a timeseries doing one of a few processes I hope??
 ; Input:
