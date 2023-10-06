@@ -158,21 +158,21 @@ for i = 0, b-1 do begin
                 fname_maker, start, 'intensity', 'txt', fname
                 proton_intensity, mjs0, dseq, intensity
                 openw, 1, fname, /append
-                printf, 1, intensity, form = "1f10.5"
+                printf, 1, intensity
                 close, 1
         endif
         if keyword_set(blueshift) then begin
                 fname_maker, start, 'blueshift', 'txt', fname
                 proton_blueshift, blueshift
                 openw, 1, fname, /append
-                printf, 1, blueshift, form = "1f10.5"
+                printf, 1, blueshift
                 close, 1
         endif
         if keyword_set(temperature) then begin
                 fname_maker, start, 'temperature', 'txt', fname
                 oh_temperature, mjs0, time, dseq, temperature
                 openw, 1, fname, /append
-                printf, 1, temperature, form = "1f10.5"
+                printf, 1, temperature
                 close, 1
         endif
 
