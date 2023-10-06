@@ -130,11 +130,18 @@ fname = fname.compress()
 end
 
 pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature
-
 ; Creates a timeseries doing one of a few processes I hope??
-; Input:
-;       panel (integer) = 2 for OH panel and 3 for proton panel
-;       time_int (integer) = Length of time in (s) for 
+; Inputs
+;       start (string) : The start time of the period of interest in form 'dd/mm/yyyy hh:mm:ss'
+;       interval_length (double) : The length of each interval in (s)
+;       total_lentgh (double) : The total duration of the period of interst in (s) - must be a multiple of interval_length or it will break and be annoying
+; Keywords
+;       intensity : Proton peak intensities will be calculated
+;       blueshift : The blueshift of the COM of the proton peak will be calculated as the difference from the rest Ha wavelength
+;       temperature : This will calculate the rotational temperature of the OH profiles from the OH panel (2)
+; Outputs
+;       Creates separate file for each of the keywords used with filename of form (below), in the working directory
+;               'yyyymmdd_hh_mm_intensity.txt' 
 
 extract_datetime, start, datetime
 intervals, datetime, interval_length, total_length, start_times
