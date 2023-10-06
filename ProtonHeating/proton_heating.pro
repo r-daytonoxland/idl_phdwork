@@ -163,9 +163,9 @@ for i = 0, b-1 do begin
         endif
         if keyword_set(temperature) then begin
                 fname_maker, start, 'temperature', 'txt', fname
-                oh_temperature, mjs0, time, dseq, toh
+                oh_temperature, mjs0, time, dseq, temperature
                 openw, 1, fname, /append
-                printf, 1, toh
+                printf, 1, temperature
                 close, 1
         endif
 
