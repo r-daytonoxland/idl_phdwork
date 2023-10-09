@@ -126,7 +126,7 @@ extract_datetime, time_string, datetime
 
 dt = string(datetime)
 
-if keyword_set(lib) then do begin
+if keyword_set(lib) then begin
         fname = '~/lib/' + dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + '.' + file_suffix
 endif else begin
                 fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + '.' + file_suffix
