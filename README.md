@@ -2,6 +2,27 @@
 
 Various IDL functions for the processing and analysis of data from Southampton's HiTIES instrument
 
+.
+├── LICENSE
+├── ProtonAcceleration
+│   ├── askdat.pro
+│   ├── blueshift.pro
+│   ├── bootstrap.pro
+│   ├── getimeseries.pro
+│   ├── leastsquaresfit.pro
+│   ├── panelintensity.pro
+│   ├── periodicity.pro
+│   ├── proton_keogram.pro
+│   ├── spaceintegrate.pro
+│   ├── spectrathing.pro
+│   ├── stuff.pro
+│   └── temp_space.pro
+├── ProtonHeating
+│   ├── dan_stuff.pro
+│   ├── file_reader.pro
+│   └── proton_heating.pro
+└── README.md
+
 ## ProtonAcceleration
 Looking for periodicic signals in the intensity and energy of the proton emission profile
 
