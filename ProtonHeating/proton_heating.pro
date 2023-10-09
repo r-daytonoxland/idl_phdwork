@@ -111,12 +111,14 @@ endfor
 
 end
 
-pro fname_maker, time_string, result_type, file_suffix, fname
+pro fname_maker, time_string, result_type, file_suffix, lib=lib, fname
 ; Generates a filename from the starting input string (time) and the result eg 'intensity' or 'spectrum'
 ; Inputs
 ;       time_string (string) : The start time of the data in 'dd/mm/yyyy hh:mm:ss' form
 ;       result_type (string) : A string describing the contents of the file e.g. 'spectrum'
 ;       file_suffix (string) : The file type suffix e.g. 'txt'
+; Keywords
+;       lib : Saves the file to the lib directory in home 
 ; Outputs
 ;       fname (string) : Hopefully a suitable, standard filename for your result
 
@@ -124,12 +126,17 @@ extract_datetime, time_string, datetime
 
 dt = string(datetime)
 
-fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + '.' + file_suffix
+if keyword_set(lib) then do begin
+        fname = '~/lib/' + dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + '.' + file_suffix
+endif else begin
+                fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + '.' + file_suffix
+endelse
+
 fname = fname.compress()
 
 end
 
-pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature
+pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature, lib=lib
 ; Creates a timeseries doing one of a few processes I hope??
 ; Inputs
 ;       start (string) : The start time of the period of interest in form 'dd/mm/yyyy hh:mm:ss'
@@ -139,6 +146,7 @@ pro create_timeseries, start, interval_length, total_length, intensity=intensity
 ;       intensity : Proton peak intensities will be calculated
 ;       blueshift : The blueshift of the COM of the proton peak will be calculated as the difference from the rest Ha wavelength
 ;       temperature : This will calculate the rotational temperature of the OH profiles from the OH panel (2)
+;       lib : Saves outputs to lib directory
 ; Outputs
 ;       Creates separate file for each of the keywords used with filename of form (below), in the working directory
 ;               'yyyymmdd_hh_mm_intensity.txt' 
@@ -149,27 +157,27 @@ intervals, datetime, interval_length, total_length, start_times
 a = size(start_times)
 b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
 
-fname_maker, start, 'datatype', 'txt', fname_gen
+fname_maker, start, 'datatype', 'txt', fname_gen, lib=lib
 
 ;Reading in data...
 for i = 0, b-1 do begin
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
         if keyword_set(intensity) then begin
-                fname_maker, start, 'intensity', 'txt', fname
+                fname_maker, start, 'intensity', 'txt', lib=lib, fname
                 proton_intensity, mjs0, dseq, intensity
                 openw, 1, fname, /append
                 printf, 1, intensity
                 close, 1
         endif
         if keyword_set(blueshift) then begin
-                fname_maker, start, 'blueshift', 'txt', fname
+                fname_maker, start, 'blueshift', 'txt', lib=lib, fname
                 proton_blueshift, blueshift
                 openw, 1, fname, /append
                 printf, 1, blueshift
                 close, 1
         endif
         if keyword_set(temperature) then begin
-                fname_maker, start, 'temperature', 'txt', fname
+                fname_maker, start, 'temperature', 'txt', lib=lib, fname
                 oh_temperature, mjs0, time, dseq, temperature
                 openw, 1, fname, /append
                 printf, 1, temperature
