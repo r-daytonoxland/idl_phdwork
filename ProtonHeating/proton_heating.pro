@@ -151,6 +151,7 @@ pro create_timeseries, start, interval_length, total_length, intensity=intensity
 ;       Creates separate file for each of the keywords used with filename of form (below), in the working directory or in lib/ depending on keywords
 ;               'yyyymmdd_hh_mm_intensity.txt' 
 
+print, 'Getting datetimes...'
 extract_datetime, start, datetime
 intervals, datetime, interval_length, total_length, start_times
 
@@ -161,27 +162,34 @@ fname_maker, start, 'datatype', 'txt', fname_gen, lib=lib
 
 ;Reading in data...
 for i = 0, b-1 do begin
+        print, 'Reading tim...'
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
         if keyword_set(intensity) then begin
                 fname_maker, start, 'intensity', 'txt', lib=lib, fname
+                print, 'Calculating intensity...'
                 proton_intensity, mjs0, dseq, intensity
                 openw, 1, fname, /append
                 printf, 1, intensity
                 close, 1
+                print, 'Intensity saved'
         endif
         if keyword_set(blueshift) then begin
                 fname_maker, start, 'blueshift', 'txt', lib=lib, fname
+                print, 'Calculating blueshift...'
                 proton_blueshift, mjs0, dseq, blueshift
                 openw, 1, fname, /append
                 printf, 1, blueshift
                 close, 1
+                print, 'Blueshift saved'
         endif
         if keyword_set(temperature) then begin
                 fname_maker, start, 'temperature', 'txt', lib=lib, fname
+                print, 'Calculating temperature...'
                 oh_temperature, mjs0, time, dseq, temperature
                 openw, 1, fname, /append
                 printf, 1, temperature
                 close, 1
+                print, 'Temperature saved'
         endif
 
 endfor
