@@ -137,7 +137,7 @@ fname = fname.compress()
 end
 
 pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature, lib=lib
-; Creates a timeseries doing one of a few processes I hope??
+; Creates a timeseries of intensity, blueshift, and/or OH temperature for a chosen time period and interval length
 ; Inputs
 ;       start (string) : The start time of the period of interest in form 'dd/mm/yyyy hh:mm:ss'
 ;       interval_length (double) : The length of each interval in (s)
@@ -148,7 +148,7 @@ pro create_timeseries, start, interval_length, total_length, intensity=intensity
 ;       temperature : This will calculate the rotational temperature of the OH profiles from the OH panel (2)
 ;       lib : Saves outputs to lib directory
 ; Outputs
-;       Creates separate file for each of the keywords used with filename of form (below), in the working directory
+;       Creates separate file for each of the keywords used with filename of form (below), in the working directory or in lib/ depending on keywords
 ;               'yyyymmdd_hh_mm_intensity.txt' 
 
 extract_datetime, start, datetime
@@ -188,16 +188,6 @@ endfor
 
 print, ' Files saved at ' + fname_gen
 
-;Getting panel...
-; a = size(time)
-; dim = a[1]          ; The length of time in 1/2 second steps
-; nosteps = dim / 120   ; Number of minutes-1 
-
-;Integrating in spatial direction...
-;peakint = total(space_integrated[*,210:270], 2)
-;peakint = peakint/120. ; mean
-
-
 ; ;Error handling...
 ; blank = fltarr(60) + !Values.F_NaN
 
@@ -211,16 +201,7 @@ print, ' Files saved at ' + fname_gen
 ;                 continue
 ;                 catch, /cancel
 ;         endif
-;         ;timeindices = [where(time eq i*60.),where(time eq ((i+1)*60.)-0.5)] ; Start,end of minute
-;         ;minutedata = peakint[timeindices[0]:timeindices[1]] ; Data for that minute	
-
-; 	;Background remove
-; 	;x = findgen(120)
-; 	;background = linfit(x, minutedata)
-; 	;timeseries = minutedata - (background[0] + x*background[1])
-
-; 	;Make and save autocorrelation for minute of data
-;         a = size(space_integrated)
+;
 ;         openw, 1, fname, /append
 ;         if a[1] eq 120 then begin                           ; Check there is 60s of data
 ;                 acorr = a_correlate(timeseries, lags)
