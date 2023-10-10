@@ -171,7 +171,7 @@ for i = 0, b-1 do begin
         endif
         if keyword_set(blueshift) then begin
                 fname_maker, start, 'blueshift', 'txt', lib=lib, fname
-                proton_blueshift, blueshift
+                proton_blueshift, mjs0, dseq, blueshift
                 openw, 1, fname, /append
                 printf, 1, blueshift
                 close, 1
