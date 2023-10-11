@@ -15,3 +15,20 @@ FREE_LUN, lun
 data = float(array)
 
 end
+
+pro readall, file_start, data, lib=lib
+
+path = '~/lib/'
+
+if keyword_set(lib) then begin
+  fnames = [path + file_start + 'intensity.txt', path + file_start + 'blueshift.txt', path + file_start + 'temperature.txt']
+endif else begin
+  fnames = [file_start + 'intensity.txt', file_start + 'blueshift.txt', file_start + 'temperature.txt']
+endelse
+readfile, fnames[0], intensity
+readfile, fnames[1], blueshift
+readfile, fnames[2], temperature
+
+data = [intensity, blueshift, temperature]
+
+end
