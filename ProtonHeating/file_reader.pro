@@ -16,7 +16,7 @@ data = float(array)
 
 end
 
-pro readall, file_start, data, lib=lib
+pro readall, file_start, intensity, blueshift, temperature, lib=lib
 
 path = '~/lib/'
 
@@ -25,10 +25,9 @@ if keyword_set(lib) then begin
 endif else begin
   fnames = [file_start + 'intensity.txt', file_start + 'blueshift.txt', file_start + 'temperature.txt']
 endelse
+
 readfile, fnames[0], intensity
 readfile, fnames[1], blueshift
 readfile, fnames[2], temperature
-
-data = [intensity, blueshift, temperature]
 
 end
