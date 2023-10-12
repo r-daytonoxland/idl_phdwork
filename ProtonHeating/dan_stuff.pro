@@ -16,8 +16,7 @@ av=reform(total(dseq,1)/double(n_elements(time)),[1,512,512])
 spectra,2,mjs0,time[0],av,sp
 get_w,mjs0,2,wl
 
-auto_wlcal,mjs0,time[0],av,2,7280d,7430d,p0,wout,/mid,ctype=1
-
+auto_wlcal,mjs0,time[0],av,2,7280d,7430d,p0,wout,/mid,ctype=1,hydroxyl=2
 
 ; Specific time of interest:
 
