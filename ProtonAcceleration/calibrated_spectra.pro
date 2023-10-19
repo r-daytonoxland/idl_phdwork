@@ -8,7 +8,7 @@ rows = duration/interval
 extract_datetime, start, datetime
 intervals, datetime, interval, duration, start_times
 
-data = fltarr[403, rows]
+data = fltarr(403, rows)
 
 for i=0, rows -1 do begin
     read_tim, start_times[i], interval, mjs0, time, dseq, icount, /nophot
