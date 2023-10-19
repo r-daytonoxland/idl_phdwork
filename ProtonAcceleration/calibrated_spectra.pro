@@ -1,4 +1,4 @@
-pro calibrated_spectra, start, duration, interval, fpath
+pro calibrated_spectra, start, duration, interval
 
 rows = duration/interval
 
@@ -10,9 +10,9 @@ fname_maker, start, 'spectrum', 'csv', fname, lib=lib
 read_tim, start, 0.1/60., mjs0, time, dseq, icount, /nophot
 get_w, mjs0, 3, wl
 
-header = ['timestamp', wl]
+header = ['timestamp', string(wl)]
 
-data = fltarr[402, rows]
+data = fltarr[403, rows]
 
 for i=0, rows -1 do begin
     read_tim, start_times[i], interval, mjs0, time, dseq, icount, /nophot
