@@ -1,7 +1,14 @@
 pro calibrated_spectra, start, duration, interval
-;
-;
-;
+; Creates CSV files with the calibrated spectra (proton panel is chosen) in the desired intervals
+; File header is 'timestamp' followed by each wavelength, first column is the start time of the interval and the following columns are the spectrum intensity values
+; Inputs
+;   start (string) : The start time of the desired time period in form 'dd/mm/yyyy hh:mm:ss'
+;   duration (int) : The duration of the entire time period in s
+;   interval (int) : The length of each interval (time the spectrum will be integrated over) in s
+; Keywords
+;   lib=lib : Saves the output file in ~/lib instead of the working directory
+; Outputs
+;   CSV file of form yyyymmdd_h_m_spectrum.csv 
 
 rows = duration/interval
 
