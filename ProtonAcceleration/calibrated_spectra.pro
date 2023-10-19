@@ -12,11 +12,12 @@ get_w, mjs0, 3, wl
 
 header = ['timestamp', wl]
 
-data = fltarr[]
+data = fltarr[402, rows]
 
 for i=0, rows -1 do begin
     read_tim, start_times[i], interval, mjs0, time, dseq, icount, /nophot
     spectra, 3, mjs0, time, dseq, spectrum
+    data[*, i] = [starttimes[i], spectrum]
 endfor
 
 write_csv, fname, data, header
