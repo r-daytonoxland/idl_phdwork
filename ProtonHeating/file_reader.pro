@@ -16,6 +16,17 @@ data = float(array)
 
 end
 
+pro readsimple, filename, array
+
+n_lines = file_lines(filename)
+array = fltarr(n_lines)
+
+openr, lun, filename, /get_lun
+readf, lun, array
+free_lun, lun
+
+end
+
 pro readall, file_start, intensity, blueshift, temperature, lib=lib
 
 path = '~/lib/'
@@ -26,8 +37,8 @@ endif else begin
   fnames = [file_start + 'intensity.txt', file_start + 'blueshift.txt', file_start + 'temperature.txt']
 endelse
 
-readfile, fnames[0], intensity
-readfile, fnames[1], blueshift
-readfile, fnames[2], temperature
+readsimple, fnames[0], intensity
+readsimple, fnames[1], blueshift
+readsimple, fnames[2], temperature
 
 end
