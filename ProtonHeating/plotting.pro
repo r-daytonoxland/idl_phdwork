@@ -30,6 +30,9 @@ pro plot_all_in_time, intensity, blueshift, temperature
 whats_cutoff_precious, intensity, cutoff
 trim_blueshifts, intensity, blueshift, cutoff, trimmed
 
+dims = size(intensity)
+dim = dims[-1]
 
+time = indgen(dim)
 
 end
