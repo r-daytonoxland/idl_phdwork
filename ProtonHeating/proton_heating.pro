@@ -111,11 +111,13 @@ endfor
 
 end
 
+
 pro fname_maker, time_string, result_type, interval_length, file_suffix, lib=lib, fname
 ; Generates a filename from the starting input string (time) and the result eg 'intensity' or 'spectrum'
 ; Inputs
 ;       time_string (string) : The start time of the data in 'dd/mm/yyyy hh:mm:ss' form
 ;       result_type (string) : A string describing the contents of the file e.g. 'spectrum'
+;       interval_length (int): Length of each time interval in (s)
 ;       file_suffix (string) : The file type suffix e.g. 'txt'
 ; Keywords
 ;       lib : Saves the file to the lib directory in home 
@@ -127,14 +129,15 @@ extract_datetime, time_string, datetime
 dt = string(datetime)
 
 if keyword_set(lib) then begin
-        fname = '~/lib/' + dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + interval_length + '.' + file_suffix
+        fname = '~/lib/' + dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + string(interval_length) + '.' + file_suffix
 endif else begin
-                fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + interval_length '.' + file_suffix
+                fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + string(interval_length) + '.' + file_suffix
 endelse
 
 fname = fname.compress()
 
 end
+
 
 pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature, lib=lib
 ; Creates a timeseries of intensity, blueshift, and/or OH temperature for a chosen time period and interval length
@@ -158,7 +161,7 @@ intervals, datetime, interval_length, total_length, start_times
 a = size(start_times)
 b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
 
-fname_maker, start, 'datatype', 'txt', fname_gen, lib=lib
+fname_maker, start, 'datatype', interval_length, 'txt', fname_gen, lib=lib
 
 ;Reading in data...
 for i = 0, b-1 do begin
@@ -172,7 +175,7 @@ for i = 0, b-1 do begin
                 fname_maker, start, 'intensity', interval_length, 'txt', lib=lib, fname
                 print, 'Calculating intensity...'
                 proton_intensity, mjs0, dseq, intensity
-                openw, 1, fname, /append, with=15
+                openw, 1, fname, /append
                 printf, 1, intensity
                 close, 1
                 print, 'Intensity saved'
