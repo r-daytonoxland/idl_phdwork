@@ -27,18 +27,40 @@ free_lun, lun
 
 end
 
-pro readall, file_start, intensity, blueshift, temperature, lib=lib
+pro readall, file_start, interval_length, intensity, blueshift, temperature, lib=lib
 
 path = '~/lib/'
 
 if keyword_set(lib) then begin
-  fnames = [path + file_start + 'intensity.txt', path + file_start + 'blueshift.txt', path + file_start + 'temperature.txt']
+  fnames = [path + file_start + 'intensity' + strtrim(interval_length, 2) + '.txt', path + file_start + 'blueshift' + strtrim(interval_length, 2) + '.txt', path + file_start + 'temperature' + strtrim(interval_length, 2) + '.txt']
 endif else begin
-  fnames = [file_start + 'intensity.txt', file_start + 'blueshift.txt', file_start + 'temperature.txt']
+  fnames = [file_start + 'intensity' + strtrim(interval_length, 2) + '.txt', file_start + 'blueshift' + strtrim(interval_length, 2) + '.txt', file_start + 'temperature' + strtrim(interval_length, 2) + '.txt']
 endelse
 
 readsimple, fnames[0], intensity
 readsimple, fnames[1], blueshift
 readsimple, fnames[2], temperature
+
+end
+
+pro readone, file_start, interval_length, index, data, lib=lib
+
+path = '~/lib/'
+
+if keyword_set(lib) then begin
+  fnames = [path + file_start + 'intensity' + strtrim(interval_length, 2) + '.txt', path + file_start + 'blueshift' + strtrim(interval_length, 2) + '.txt', path + file_start + 'temperature' + strtrim(interval_length, 2) + '.txt']
+endif else begin
+  fnames = [file_start + 'intensity' + strtrim(interval_length, 2) + '.txt', file_start + 'blueshift' + strtrim(interval_length, 2) + '.txt', file_start + 'temperature' + strtrim(interval_length, 2) + '.txt']
+endelse
+
+if index eq 0 then begin
+  readsimple, fnames[0], intensity
+endif
+if index eq 1 then begin
+  readsimple, fnames[1], blueshift
+endif
+if index eq 2 then begin
+  readsimple, fnames[2], temperature
+endif
 
 end
