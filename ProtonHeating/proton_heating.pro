@@ -111,7 +111,7 @@ endfor
 
 end
 
-pro fname_maker, time_string, result_type, file_suffix, lib=lib, fname
+pro fname_maker, time_string, result_type, interval_length, file_suffix, lib=lib, fname
 ; Generates a filename from the starting input string (time) and the result eg 'intensity' or 'spectrum'
 ; Inputs
 ;       time_string (string) : The start time of the data in 'dd/mm/yyyy hh:mm:ss' form
@@ -127,9 +127,9 @@ extract_datetime, time_string, datetime
 dt = string(datetime)
 
 if keyword_set(lib) then begin
-        fname = '~/lib/' + dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + '.' + file_suffix
+        fname = '~/lib/' + dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + interval_length + '.' + file_suffix
 endif else begin
-                fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + '.' + file_suffix
+                fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + interval_length '.' + file_suffix
 endelse
 
 fname = fname.compress()
@@ -169,7 +169,7 @@ for i = 0, b-1 do begin
         dseq = reform(total(dseq, 1), [1, 512, 512])
 
         if keyword_set(intensity) then begin
-                fname_maker, start, 'intensity', 'txt', lib=lib, fname
+                fname_maker, start, 'intensity', interval_length, 'txt', lib=lib, fname
                 print, 'Calculating intensity...'
                 proton_intensity, mjs0, dseq, intensity
                 openw, 1, fname, /append, with=15
@@ -178,7 +178,7 @@ for i = 0, b-1 do begin
                 print, 'Intensity saved'
         endif
         if keyword_set(blueshift) then begin
-                fname_maker, start, 'blueshift', 'txt', lib=lib, fname
+                fname_maker, start, 'blueshift', interval_length, 'txt', lib=lib, fname
                 print, 'Calculating blueshift...'
                 proton_blueshift, mjs0, dseq, blueshift
                 openw, 1, fname, /append
@@ -187,7 +187,7 @@ for i = 0, b-1 do begin
                 print, 'Blueshift saved'
         endif
         if keyword_set(temperature) then begin
-                fname_maker, start, 'temperature', 'txt', lib=lib, fname
+                fname_maker, start, 'temperature', interval_length, 'txt', lib=lib, fname
                 print, 'Calculating temperature...'
                 oh_temperature, mjs0, time, dseq, temperature
                 openw, 1, fname, /append
