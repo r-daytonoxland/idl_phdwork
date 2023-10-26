@@ -44,4 +44,6 @@ plot, time, temperature, /noerase, xrange=!x.crange, line=2, ystyle=4, xstyle=1
    ; make an axis on the right for the last plot
 AXIS, YAXIS=1, YRANGE=!y.crange, ytitle='----- Temperature'
 
+plot, time, trimmed, /noerase, xrange=!x.crange, line=2, ystyle=4, xstyle=1
+
 end
