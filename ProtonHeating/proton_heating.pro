@@ -164,11 +164,15 @@ fname_maker, start, 'datatype', 'txt', fname_gen, lib=lib
 for i = 0, b-1 do begin
         print, 'Reading tim...'
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
+
+        ; Need to reduce space_integrated to just one averaged spectrum
+        dseq = reform(total(dseq, 1), [1, 512, 512])
+
         if keyword_set(intensity) then begin
                 fname_maker, start, 'intensity', 'txt', lib=lib, fname
                 print, 'Calculating intensity...'
                 proton_intensity, mjs0, dseq, intensity
-                openw, 1, fname, /append
+                openw, 1, fname, /append, with=15
                 printf, 1, intensity
                 close, 1
                 print, 'Intensity saved'
