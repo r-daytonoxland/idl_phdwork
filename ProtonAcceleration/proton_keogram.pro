@@ -28,4 +28,3 @@ tvin, bytscl(keogram, min=1000, max=1008)
 write_png, fname, tvrd(/true)
 
 end
-
