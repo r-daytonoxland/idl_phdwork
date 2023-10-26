@@ -54,13 +54,13 @@ endif else begin
 endelse
 
 if index eq 0 then begin
-  readsimple, fnames[0], intensity
+  readsimple, fnames[0], data
 endif
 if index eq 1 then begin
-  readsimple, fnames[1], blueshift
+  readsimple, fnames[1], data
 endif
 if index eq 2 then begin
-  readsimple, fnames[2], temperature
+  readsimple, fnames[2], data
 endif
 
 end
