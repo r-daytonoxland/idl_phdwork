@@ -27,7 +27,7 @@ black = 1002.
 white = 1005.
 
 window, 0, xsize = 256*2, ysize = 512*2
-tvin, bytscl(keogram, min = black, max = white)
+tvin, bytscl(reverse(keogram, 2), min = black, max = white)
 write_png, fname, tvrd(/true)
 
 end
