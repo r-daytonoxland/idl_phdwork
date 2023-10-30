@@ -23,11 +23,11 @@ dims = size(panel)
 summed_dseq = total(panel, 2) ; mean of dseq in that direction
 keogram = summed_dseq/dims[2]
 
-scale = 0.3
-scaled = (keogram - min(keogram) / max(keogram)) * 255
+black = 1002.
+white = 1005.
 
-window, 0
-tvin, bytscl(keogram, min = scale * 255)
+window, 0, xsize = 256*2, ysize = 512*2
+tvin, bytscl(keogram, min = black, max = white)
 write_png, fname, tvrd(/true)
 
 end
