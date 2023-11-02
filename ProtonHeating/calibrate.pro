@@ -1,14 +1,20 @@
-pro calibrate_panel, start_string, len, pnum, p0, wout
+pro get_wlrange, pnum, wls
 
 if pnum eq 1 then begin
-     wls = [7920d, 8040d]
+     wls = [7915d, 8070d]
 endif
 if pnum eq 2 then begin
      wls = [7280d, 7430d] 
 endif
 if pnum eq 3 then begin
-     wls = [6500d, 6620d] 
+     wls = [6490d, 6660d] 
 endif
+
+end
+
+pro calibrate_panel, start_string, len, pnum, p0, wout
+
+get_wlrange, pnum, wls
 
 read_tim, start_string, len/60d, mjs0, time, dseq, /nophot
 
