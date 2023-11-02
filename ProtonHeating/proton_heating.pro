@@ -38,7 +38,7 @@ blueshift = 6562.81 - centre
 
 end
 
-pro oh_temperature, mjs0, time, dseq, toh
+pro oh_83_temperature, mjs0, time, dseq, toh
 ; Currently a bunch of stuff from one of Dan's stuff.pros
 ; Inputs
 ; Outputs
@@ -57,6 +57,52 @@ get_w, mjs0, 2, wl
 
 ;retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,/plot,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
 retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
+
+end
+
+pro oh_temperature, mjs0, time, dseq, toh, /eightthree, /ninefour, /fiveone
+; Currently a bunch of stuff from one of Dan's stuff.pros
+; Inputs
+; Outputs
+
+; Initialise
+h_setup
+read_lut
+
+
+oh_files, /eighthree, n2file, tlinelist, linefile, pnum
+
+av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512])
+spectra, 2, mjs0, time[0], av, sp
+get_w, mjs0, 2, wl
+
+;retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,/plot,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
+retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
+
+end
+
+pro oh_files, eightthree=eightthree, ninefour=ninefour, fiveone=fiveone, n2file, tlinelist, linefile, pnum
+
+if keyword_set(eightthree) then begin
+N2file = '$HDIR/N2spec_hwhm08.idl'
+Tlinelist = ['OH(8-3)P1(2)','OH(8-3)P1(3)','OH(8-3)P1(4)','OH(8-3)P1(5)','OH(8-3)P2(4)','OH(8-3)P2(2)','OH(8-3)P2(3)','OH(8-3)P2(5)']
+linefile = '$HDIR/input_fit_lines_Tnpanel_v4.dat'
+pnum=2
+endif
+
+if keyword_set(ninefour) then begin
+N2file = '$HDIR/N2spec_hwhm08.idl'
+Tlinelist = ['OH(8-3)P1(2)','OH(8-3)P1(3)','OH(8-3)P1(4)','OH(8-3)P1(5)','OH(8-3)P2(4)','OH(8-3)P2(2)','OH(8-3)P2(3)','OH(8-3)P2(5)']
+linefile = '$HDIR/input_fit_lines_Tnpanel_v4.dat'
+pnum=1
+endif
+
+if keyword_set(fiveone) then begin
+N2file = '$HDIR/N2spec_hwhm08.idl'
+Tlinelist = ['OH(8-3)P1(2)','OH(8-3)P1(3)','OH(8-3)P1(4)','OH(8-3)P1(5)','OH(8-3)P2(4)','OH(8-3)P2(2)','OH(8-3)P2(3)','OH(8-3)P2(5)']
+linefile = '$HDIR/input_fit_lines_Tnpanel_v4.dat'
+pnum=1
+endif
 
 end
 
@@ -192,7 +238,7 @@ for i = 0, b-1 do begin
         if keyword_set(temperature) then begin
                 fname_maker, start, 'temperature', interval_length, 'txt', lib=lib, fname
                 print, 'Calculating temperature...'
-                oh_temperature, mjs0, time, dseq, temperature
+                oh_83_temperature, mjs0, time, dseq, temperature
                 openw, 1, fname, /append
                 printf, 1, temperature
                 close, 1
