@@ -69,7 +69,7 @@ pro oh_temperature, mjs0, time, dseq, toh, /eightthree, /ninefour, /fiveone
 h_setup
 read_lut
 
-
+; Get the OH files for each thingum and then get a temperature then repeat (need to actually make work!)
 oh_files, /eighthree, n2file, tlinelist, linefile, pnum
 
 av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512])
@@ -92,15 +92,15 @@ endif
 
 if keyword_set(ninefour) then begin
 N2file = '$HDIR/N2spec_hwhm08.idl'
-Tlinelist = ['OH(8-3)P1(2)','OH(8-3)P1(3)','OH(8-3)P1(4)','OH(8-3)P1(5)','OH(8-3)P2(4)','OH(8-3)P2(2)','OH(8-3)P2(3)','OH(8-3)P2(5)']
-linefile = '$HDIR/input_fit_lines_Tnpanel_v4.dat'
+Tlinelist = ['OH(9-4)P1(2)']
+linefile = '$HDIR/input_fit_lines_'
 pnum=1
 endif
 
 if keyword_set(fiveone) then begin
-N2file = '$HDIR/N2spec_hwhm08.idl'
-Tlinelist = ['OH(8-3)P1(2)','OH(8-3)P1(3)','OH(8-3)P1(4)','OH(8-3)P1(5)','OH(8-3)P2(4)','OH(8-3)P2(2)','OH(8-3)P2(3)','OH(8-3)P2(5)']
-linefile = '$HDIR/input_fit_lines_Tnpanel_v4.dat'
+N2file = '$HDIR/N2spec_hwhm08.idl' ; ??? Do we need a different one for the OH panel ? who knos whats goin on
+Tlinelist = ['OH(5-1)P1(2)']
+linefile = '$HDIR/input_fit_lines_'
 pnum=1
 endif
 
