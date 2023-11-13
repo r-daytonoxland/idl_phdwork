@@ -1,3 +1,29 @@
+pro fname_maker, time_string, result_type, interval_length, file_suffix, lib=lib, fname
+; Generates a filename from the starting input string (time) and the result eg 'intensity' or 'spectrum'
+; Inputs
+;       time_string (string) : The start time of the data in 'dd/mm/yyyy hh:mm:ss' form
+;       result_type (string) : A string describing the contents of the file e.g. 'spectrum'
+;       interval_length (int): Length of each time interval in (s)
+;       file_suffix (string) : The file type suffix e.g. 'txt'
+; Keywords
+;       lib : Saves the file to the lib directory in home 
+; Outputs
+;       fname (string) : Hopefully a suitable, standard filename for your result
+
+extract_datetime, time_string, datetime
+
+dt = string(datetime)
+
+if keyword_set(lib) then begin
+        fname = '~/lib/' + dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + string(interval_length) + '.' + file_suffix
+endif else begin
+                fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + string(interval_length) + '.' + file_suffix
+endelse
+
+fname = fname.compress()
+
+end
+
 pro proton_intensity, mjs0, dseq, result
 ; Calculates the intensity of the peak of the proton spectrum (assume pnum = 3) from index 210:270 (works for 2021 season)
 ; Inputs
@@ -60,7 +86,7 @@ retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,TO
 
 end
 
-pro oh_temperature, mjs0, time, dseq, toh, /eightthree, /ninefour, /fiveone
+pro oh_temperature, mjs0, time, dseq, toh, eightthree=eightthree, ninefour=ninefour, fiveone=fiveone
 ; Currently a bunch of stuff from one of Dan's stuff.pros
 ; Inputs
 ; Outputs
@@ -156,34 +182,6 @@ for i = 0 ,number_intervals - 1 do begin
 endfor
 
 end
-
-
-pro fname_maker, time_string, result_type, interval_length, file_suffix, lib=lib, fname
-; Generates a filename from the starting input string (time) and the result eg 'intensity' or 'spectrum'
-; Inputs
-;       time_string (string) : The start time of the data in 'dd/mm/yyyy hh:mm:ss' form
-;       result_type (string) : A string describing the contents of the file e.g. 'spectrum'
-;       interval_length (int): Length of each time interval in (s)
-;       file_suffix (string) : The file type suffix e.g. 'txt'
-; Keywords
-;       lib : Saves the file to the lib directory in home 
-; Outputs
-;       fname (string) : Hopefully a suitable, standard filename for your result
-
-extract_datetime, time_string, datetime
-
-dt = string(datetime)
-
-if keyword_set(lib) then begin
-        fname = '~/lib/' + dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + string(interval_length) + '.' + file_suffix
-endif else begin
-                fname = dt[0] + dt[1] + dt[2] + '_' + dt[3] + '_' + dt[4] + '_' + result_type + string(interval_length) + '.' + file_suffix
-endelse
-
-fname = fname.compress()
-
-end
-
 
 pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature, lib=lib
 ; Creates a timeseries of intensity, blueshift, and/or OH temperature for a chosen time period and interval length
