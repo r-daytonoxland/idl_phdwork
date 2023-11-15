@@ -7,7 +7,7 @@ ss = list()
 get_wlrange, pnum, wls
 
 ; For a range of physically probably OH temperatures
-for T=150d, 250d, 1 do begin
+for T=170d, 220d, 1 do begin
 	; Generate the synthetic OH spectrum
 	synth_oh, wls, T, ohwl, ohint, width, upperv=upperv
 	; Convolve it to the required wavelengths
@@ -39,7 +39,7 @@ pro leastsquaresfit, synth_spectra, data, arange, brange, besta, bestb, bests, h
 
 bestfit = 1
 
-if keywordset(halpha)
+if keyword_set(halpha) then begin
 	step = fltarr(402) + 1
 	step[200:280] = 0
 endif
@@ -53,7 +53,7 @@ for a=arange[0], arange[1], arange[2] do begin
 
 			model = synth_spectra[s, *]
 
-			if keywordset(halpha) then begin
+			if keyword_set(halpha) then begin
 				 oh = (b * model * step)
 				 tidy = (data - a)*step
 				 lsf = total((tidy - oh)^2)

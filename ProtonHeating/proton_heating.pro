@@ -24,6 +24,74 @@ fname = fname.compress()
 
 end
 
+pro sp_func, X, A, F
+; Input function for fitting the combined spectrum in the OH panel
+; Inputs
+;       X is wl (the wavelengths of the panel)
+;       A is the guess free parameters A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background
+; Outputs
+;       A is the updated parameters
+;       F is the function y values
+
+pnum = 1
+get_wlrange, pnum, wls
+
+synth_oh, wls, A[0], ohwl, ohint, width, upperv=9
+convolve_sp, ohwl, ohint, 0.6d, X, sp1
+
+synth_oh, wls, A[1], ohwl, ohint, width, upperv=5
+convolve_sp, ohwl, ohint, 0.6d, X, sp2
+
+F = (A[2] * sp1) + (A[3] * sp2) + A[4]
+
+end
+
+pro sp_func_o, X, A, F
+; Input function for fitting the combined spectrum in the OH panel
+; Inputs
+;       X is wl (the wavelengths of the panel)
+;       A is the guess free parameters A[0] = Temperature, A[1] = Intensity, A[2] = Background
+; Outputs
+;       A is the updated parameters
+;       F is the function y values
+
+pnum = 2
+get_wlrange, pnum, wls
+
+synth_oh, wls, A[0], ohwl, ohint, width, upperv=9
+convolve_sp, ohwl, ohint, 0.6d, X, sp
+
+F = (A[1] * sp) + A[2]
+
+end
+
+pro ohpanel_fit, wl, sp, A, result
+; Fits the two spectra for the oh panel separately
+; Inputs
+;       wl vector (402) : the wavelengths
+;       sp vector (402) : the spectrum to be fit
+; Outputs
+;       A vector (5) : the output free parameters A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background
+;       result vector (402) : the output best fit model spectrum
+
+A = [200, 200, 0.05, 0.05, 0.0015]  ; Guess inputs
+fita = [1, 1, 1, 1, 1]  ; Fit everything
+weights = fltarr(402) + 1  ; Don't weight
+
+result = curvefit(wl, sp, weights, A, sigma, function_name='sp_func', /noderivative, itmax=100, /double, fita=fita)
+
+end
+
+pro opanel_fit, wl, sp, A, result
+
+A = [200d, 0.05d, 0.0015d]
+fita = [1, 1, 1]
+weights = fltarr(402) + 1
+
+result = curvefit(wl, sp, weights, A, sigma, function_name='sp_func_o', /noderivative, itmax=100, /double, fita=fita)
+
+end
+
 pro proton_intensity, mjs0, dseq, result
 ; Calculates the intensity of the peak of the proton spectrum (assume pnum = 3) from index 210:270 (works for 2021 season)
 ; Inputs
@@ -64,70 +132,26 @@ blueshift = 6562.81 - centre
 
 end
 
-pro oh_83_temperature, mjs0, time, dseq, toh
-; Currently a bunch of stuff from one of Dan's stuff.pros
+pro oh_fitting, mjs0, time, dseq, A, opanel=opanel, ohpanel=ohpanel
+; Gets the temperatures and intensities of the OH band in the O panel or the combined bands in the OH panel.
 ; Inputs
+;       mjs0 (double) : Ths mjs value from read_tim
+;       time (float array) : The time from read_tim
+;       dseq (float array) : The dseq from read_tim
 ; Outputs
-
-; Initialise
-h_setup
-read_lut
-N2file = '$HDIR/N2spec_hwhm08.idl'
-Tlinelist = ['OH(8-3)P1(2)','OH(8-3)P1(3)','OH(8-3)P1(4)','OH(8-3)P1(5)','OH(8-3)P2(4)','OH(8-3)P2(2)','OH(8-3)P2(3)','OH(8-3)P2(5)']
-linefile = '$HDIR/input_fit_lines_Tnpanel_v4.dat'
-pnum=2
+;       A is either A[0] = Temperature, A[1] = Intensity, A[2] = Background for /opanel
+;                or A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background for /ohpanel
 
 av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512])
 spectra, 2, mjs0, time[0], av, sp
 get_w, mjs0, 2, wl
 
-;retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,/plot,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
-retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
-
-end
-
-pro oh_temperature, mjs0, time, dseq, toh, eightthree=eightthree, ninefour=ninefour, fiveone=fiveone
-; Currently a bunch of stuff from one of Dan's stuff.pros
-; Inputs
-; Outputs
-
-; Initialise
-h_setup
-read_lut
-
-; Get the OH files for each thingum and then get a temperature then repeat (need to actually make work!)
-oh_files, /eighthree, n2file, tlinelist, linefile, pnum
-
-av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512])
-spectra, 2, mjs0, time[0], av, sp
-get_w, mjs0, 2, wl
-
-;retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,/plot,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
-retrieve_spec_params, mjs0,time[0],av,1,pnum,linefile,Tlinelist,N2file=N2file,TOH,subTOH,TN2,IN2,PWV,params,subTerror,I_Op,errortag,V_P1,V_P2,V_Q
-
-end
-
-pro oh_files, eightthree=eightthree, ninefour=ninefour, fiveone=fiveone, n2file, tlinelist, linefile, pnum
-
-if keyword_set(eightthree) then begin
-N2file = '$HDIR/N2spec_hwhm08.idl'
-Tlinelist = ['OH(8-3)P1(2)','OH(8-3)P1(3)','OH(8-3)P1(4)','OH(8-3)P1(5)','OH(8-3)P2(4)','OH(8-3)P2(2)','OH(8-3)P2(3)','OH(8-3)P2(5)']
-linefile = '$HDIR/input_fit_lines_Tnpanel_v4.dat'
-pnum=2
+if keyword_set(ohpanel) then begin
+        ohpanel_fit, wl, sp, A, result
 endif
 
-if keyword_set(ninefour) then begin
-N2file = '$HDIR/N2spec_hwhm08.idl'
-Tlinelist = ['OH(9-4)P1(2)']
-linefile = '$HDIR/input_fit_lines_'
-pnum=1
-endif
-
-if keyword_set(fiveone) then begin
-N2file = '$HDIR/N2spec_hwhm08.idl' ; ??? Do we need a different one for the OH panel ? who knos whats goin on
-Tlinelist = ['OH(5-1)P1(2)']
-linefile = '$HDIR/input_fit_lines_'
-pnum=1
+if keyword_set(opanel) then begin 
+        opanel_fit, wl, sp, A, result
 endif
 
 end
@@ -183,31 +207,25 @@ endfor
 
 end
 
-pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature, lib=lib
+pro create_timeseries, start, interval_length, total_length, lib=lib
 ; Creates a timeseries of intensity, blueshift, and/or OH temperature for a chosen time period and interval length
 ; Inputs
 ;       start (string) : The start time of the period of interest in form 'dd/mm/yyyy hh:mm:ss'
 ;       interval_length (double) : The length of each interval in (s)
 ;       total_lentgh (double) : The total duration of the period of interst in (s) - must be a multiple of interval_length or it will break and be annoying
 ; Keywords
-;       intensity : Proton peak intensities will be calculated
-;       blueshift : The blueshift of the COM of the proton peak will be calculated as the difference from the rest Ha wavelength
-;       temperature : This will calculate the rotational temperature of the OH profiles from the OH panel (2)
-;       lib : Saves outputs to lib directory
+;       lib : saves to lib directory
 ; Outputs
-;       Creates separate file for each of the keywords used with filename of form (below), in the working directory or in lib/ depending on keywords
-;               'yyyymmdd_hh_mm_intensity.txt' 
+;       Creates file
 
 print, 'Getting datetimes...'
 extract_datetime, start, datetime
 intervals, datetime, interval_length, total_length, start_times
 
-a = size(start_times)
-b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
+a = n_elements(start_times)
 
-fname_maker, start, 'datatype', interval_length, 'txt', fname_gen, lib=lib
+fname_maker, start, 'allparams', interval_length, 'txt', fname_gen, lib=lib
 
-;Reading in data...
 for i = 0, b-1 do begin
         print, 'Reading tim...'
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
@@ -215,60 +233,101 @@ for i = 0, b-1 do begin
         ; Need to reduce space_integrated to just one averaged spectrum
         dseq = reform(total(dseq, 1), [1, 512, 512])
 
-        if keyword_set(intensity) then begin
-                fname_maker, start, 'intensity', interval_length, 'txt', lib=lib, fname
-                print, 'Calculating intensity...'
-                proton_intensity, mjs0, dseq, intensity
-                openw, 1, fname, /append
-                printf, 1, intensity
-                close, 1
-                print, 'Intensity saved'
-        endif
-        if keyword_set(blueshift) then begin
-                fname_maker, start, 'blueshift', interval_length, 'txt', lib=lib, fname
-                print, 'Calculating blueshift...'
-                proton_blueshift, mjs0, dseq, blueshift
-                openw, 1, fname, /append
-                printf, 1, blueshift
-                close, 1
-                print, 'Blueshift saved'
-        endif
-        if keyword_set(temperature) then begin
-                fname_maker, start, 'temperature', interval_length, 'txt', lib=lib, fname
-                print, 'Calculating temperature...'
-                oh_83_temperature, mjs0, time, dseq, temperature
-                openw, 1, fname, /append
-                printf, 1, temperature
-                close, 1
-                print, 'Temperature saved'
-        endif
+        proton_intensity, mjs0, dseq, intensity
+        proton_blueshift, mjs0, dseq, blueshift
+        oh_fitting, mjs0, time, dseq, A, /opanel
+        oh_fitting, mjs0, time, dseq, B, /ohpanel
 
 endfor
 
-print, ' Files saved at ' + fname_gen
+end
 
-; ;Error handling...
-; blank = fltarr(60) + !Values.F_NaN
+; pro create_timeseries, start, interval_length, total_length, intensity=intensity, blueshift=blueshift, temperature=temperature, lib=lib
+; ; Creates a timeseries of intensity, blueshift, and/or OH temperature for a chosen time period and interval length
+; ; Inputs
+; ;       start (string) : The start time of the period of interest in form 'dd/mm/yyyy hh:mm:ss'
+; ;       interval_length (double) : The length of each interval in (s)
+; ;       total_lentgh (double) : The total duration of the period of interst in (s) - must be a multiple of interval_length or it will break and be annoying
+; ; Keywords
+; ;       intensity : Proton peak intensities will be calculated
+; ;       blueshift : The blueshift of the COM of the proton peak will be calculated as the difference from the rest Ha wavelength
+; ;       temperature : This will calculate the rotational temperature of the OH profiles from the OH panel (2)
+; ;       lib : Saves outputs to lib directory
+; ; Outputs
+; ;       Creates separate file for each of the keywords used with filename of form (below), in the working directory or in lib/ depending on keywords
+; ;               'yyyymmdd_hh_mm_intensity.txt' 
 
-; ;Loop
-; for i=0,nosteps do begin
-;         catch, error_status
-;         if error_status ne 0 then begin
+; print, 'Getting datetimes...'
+; extract_datetime, start, datetime
+; intervals, datetime, interval_length, total_length, start_times
+
+; a = size(start_times)
+; b = a[-1]  ; Gets the number of startimes i.e. intervals from start_times
+
+; fname_maker, start, 'datatype', interval_length, 'txt', fname_gen, lib=lib
+
+; ;Reading in data...
+; for i = 0, b-1 do begin
+;         print, 'Reading tim...'
+;         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
+
+;         ; Need to reduce space_integrated to just one averaged spectrum
+;         dseq = reform(total(dseq, 1), [1, 512, 512])
+
+;         if keyword_set(intensity) then begin
+;                 fname_maker, start, 'intensity', interval_length, 'txt', lib=lib, fname
+;                 print, 'Calculating intensity...'
+;                 proton_intensity, mjs0, dseq, intensity
 ;                 openw, 1, fname, /append
-;                 printf, 1, blank, form='(60f10.5)'
+;                 printf, 1, intensity
 ;                 close, 1
-;                 continue
-;                 catch, /cancel
+;                 print, 'Intensity saved'
 ;         endif
-;
-;         openw, 1, fname, /append
-;         if a[1] eq 120 then begin                           ; Check there is 60s of data
-;                 acorr = a_correlate(timeseries, lags)
-;                 printf, 1, acorr, form='(60f10.5)'
-;         endif else begin
-;                 printf, 1, blank, form='(60f10.5)'          ; If not print row of NaNs
-;         endelse
-;         close, 1
+;         if keyword_set(blueshift) then begin
+;                 fname_maker, start, 'blueshift', interval_length, 'txt', lib=lib, fname
+;                 print, 'Calculating blueshift...'
+;                 proton_blueshift, mjs0, dseq, blueshift
+;                 openw, 1, fname, /append
+;                 printf, 1, blueshift
+;                 close, 1
+;                 print, 'Blueshift saved'
+;         endif
+;         if keyword_set(temperature) then begin
+;                 fname_maker, start, 'temperature', interval_length, 'txt', lib=lib, fname
+;                 print, 'Calculating temperature...'
+;                 oh_83_temperature, mjs0, time, dseq, temperature
+;                 openw, 1, fname, /append
+;                 printf, 1, temperature
+;                 close, 1
+;                 print, 'Temperature saved'
+;         endif
+
 ; endfor
 
-end
+; print, ' Files saved at ' + fname_gen
+
+; ; ;Error handling...
+; ; blank = fltarr(60) + !Values.F_NaN
+
+; ; ;Loop
+; ; for i=0,nosteps do begin
+; ;         catch, error_status
+; ;         if error_status ne 0 then begin
+; ;                 openw, 1, fname, /append
+; ;                 printf, 1, blank, form='(60f10.5)'
+; ;                 close, 1
+; ;                 continue
+; ;                 catch, /cancel
+; ;         endif
+; ;
+; ;         openw, 1, fname, /append
+; ;         if a[1] eq 120 then begin                           ; Check there is 60s of data
+; ;                 acorr = a_correlate(timeseries, lags)
+; ;                 printf, 1, acorr, form='(60f10.5)'
+; ;         endif else begin
+; ;                 printf, 1, blank, form='(60f10.5)'          ; If not print row of NaNs
+; ;         endelse
+; ;         close, 1
+; ; endfor
+
+; end
