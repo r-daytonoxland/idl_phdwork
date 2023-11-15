@@ -1,7 +1,7 @@
 pro get_wlrange, pnum, wls
 
 if pnum eq 1 then begin
-     wls = [7915d, 8070d]
+     wls = [7900d, 8070d]
 endif
 if pnum eq 2 then begin
      wls = [7280d, 7430d] 
