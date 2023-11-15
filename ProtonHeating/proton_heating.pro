@@ -24,6 +24,12 @@ fname = fname.compress()
 
 end
 
+pro crop, vector, cropped
+
+cropped = vector[70:401]
+
+end
+
 pro sp_func, X, A, F
 ; Input function for fitting the combined spectrum in the OH panel
 ; Inputs
@@ -58,7 +64,7 @@ pro sp_func_o, X, A, F
 pnum = 2
 get_wlrange, pnum, wls
 
-synth_oh, wls, A[0], ohwl, ohint, width, upperv=9
+synth_oh, wls, A[0], ohwl, ohint, width
 convolve_sp, ohwl, ohint, 0.6d, X, sp
 
 F = (A[1] * sp) + A[2]
@@ -78,7 +84,10 @@ A = [200, 200, 0.05, 0.05, 0.002]  ; Guess inputs
 fita = [1, 1, 1, 1, 1]  ; Fit everything
 weights = fltarr(402) + 1  ; Don't weight
 
-result = curvefit(wl, sp, weights, A, sigma, function_name='sp_func', /noderivative, itmax=100, /double, fita=fita)
+crop, wl, wlc
+crop, sp, spc
+
+result = curvefit(wlc, spc, weights, A, sigma, function_name='sp_func', /noderivative, itmax=100, /double, fita=fita)
 
 end
 
@@ -88,7 +97,10 @@ A = [200d, 0.05d, 0.0015d]
 fita = [1, 1, 1]
 weights = fltarr(402) + 1
 
-result = curvefit(wl, sp, weights, A, sigma, function_name='sp_func_o', /noderivative, itmax=100, /double, fita=fita)
+crop, wl, wlc
+crop, sp, spc
+
+result = curvefit(wlc, spc, weights, A, sigma, function_name='sp_func_o', /noderivative, itmax=100, /double, fita=fita)
 
 end
 
