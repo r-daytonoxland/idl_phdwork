@@ -74,7 +74,7 @@ pro ohpanel_fit, wl, sp, A, result
 ;       A vector (5) : the output free parameters A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background
 ;       result vector (402) : the output best fit model spectrum
 
-A = [200, 200, 0.05, 0.05, 0.0015]  ; Guess inputs
+A = [200, 200, 0.05, 0.05, 0.002]  ; Guess inputs
 fita = [1, 1, 1, 1, 1]  ; Fit everything
 weights = fltarr(402) + 1  ; Don't weight
 
@@ -142,15 +142,18 @@ pro oh_fitting, mjs0, time, dseq, A, opanel=opanel, ohpanel=ohpanel
 ;       A is either A[0] = Temperature, A[1] = Intensity, A[2] = Background for /opanel
 ;                or A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background for /ohpanel
 
-av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512])
-spectra, 2, mjs0, time[0], av, sp
-get_w, mjs0, 2, wl
+av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512]) ; Mean
+;av = reform(median(dseq, dimension=1), [1, 512, 512]) ; Median
 
 if keyword_set(ohpanel) then begin
+        spectra, 1, mjs0, time[0], av, sp
+        get_w, mjs0, 1, wl
         ohpanel_fit, wl, sp, A, result
 endif
 
-if keyword_set(opanel) then begin 
+if keyword_set(opanel) then begin
+        spectra, 2, mjs0, time[0], av, sp
+        get_w, mjs0, 2, wl
         opanel_fit, wl, sp, A, result
 endif
 
@@ -231,12 +234,14 @@ for i = 0, b-1 do begin
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
 
         ; Need to reduce space_integrated to just one averaged spectrum
-        dseq = reform(total(dseq, 1), [1, 512, 512])
+        ;dseq = reform(total(dseq, 1), [1, 512, 512]) ; Mean
+        median = reform(median(dseq, dimension=1), [1, 512, 512]) ; Median
 
         proton_intensity, mjs0, dseq, intensity
         proton_blueshift, mjs0, dseq, blueshift
         oh_fitting, mjs0, time, dseq, A, /opanel
         oh_fitting, mjs0, time, dseq, B, /ohpanel
+
 
 endfor
 
