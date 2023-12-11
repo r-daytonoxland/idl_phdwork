@@ -80,7 +80,7 @@ pro ohpanel_fit, wl, sp, A, result
 ;       A vector (5) : the output free parameters A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background
 ;       result vector (402) : the output best fit model spectrum
 
-A = [200, 200, 0.05, 0.05, 0.002]  ; Guess inputs
+A = [200, 200, 0.01, 0.05, 0.002]  ; Guess inputs
 fita = [1, 1, 1, 1, 1]  ; Fit everything
 weights = fltarr(402) + 1  ; Don't weight
 
