@@ -237,11 +237,14 @@ print, 'Getting datetimes...'
 extract_datetime, start, datetime
 intervals, datetime, interval_length, total_length, start_times
 
-a = n_elements(start_times)
+len = n_elements(start_times)
 
 fname_maker, start, 'allparams', interval_length, 'txt', fname_gen, lib=lib
 
-for i = 0, b-1 do begin
+csvdat = fltarr(8, len)
+header = ['protonintensity', 'blueshift', 'oh82temp', 'oh82intensity', 'oh94temp', 'oh51temp', 'oh94intensity', 'oh51intensity']
+
+for i = 0, len-1 do begin
         print, 'Reading tim...'
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
 
@@ -254,8 +257,14 @@ for i = 0, b-1 do begin
         oh_fitting, mjs0, time, dseq, A, /opanel
         oh_fitting, mjs0, time, dseq, B, /ohpanel
 
+        AA = A[0:1]
+        BB = B[0:3]
+
+        csvdat[*, i] = [intensity, blueshift, AA, BB]
 
 endfor
+
+write_csv, fname_gen, csvdat, header=header
 
 end
 
