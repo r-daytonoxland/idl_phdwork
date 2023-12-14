@@ -81,15 +81,17 @@ if n_elements(chadney) lt 1 then begin ; Use the newer coefficients
    dat=strsplit(aa,/extract)
    ; Don't include lines outside our wavelength range
    if (double(dat[9]) lt vrange[0]) || (double(dat[9]) gt vrange[1]) then continue ; Not in our range, don't care about it
-   ; Don't include transitions from vibrational levels > 9 or < 6
-   ; Not needed now we have upperv keyword
-   ;;if (fix(dat[0]) gt 9) || (fix(dat[0]) lt 6) then continue
-   ; Don't include transitions with different F-levels
-   ;if (dat[4] ne dat[5]) then continue
-   ; Don't include transitions with J > 9
-   ;if (float(dat[2]) gt 9) then continue
-   ; For Q-branch, don't include L>6 ; Note: was 3
-   ;if (dat[2] eq dat[3]) && ((float(dat[2])+float(dat[4])-1.5) gt 6) then continue
+   if (n_elements(upperv) eq 0) then begin
+    ; Don't include transitions from vibrational levels > 9 or < 6
+    ; Not needed now we have upperv keyword
+    if (fix(dat[0]) gt 9) || (fix(dat[0]) lt 6) then continue
+    ; Don't include transitions with different F-levels
+    if (dat[4] ne dat[5]) then continue
+    ; Don't include transitions with J > 9
+    if (float(dat[2]) gt 9) then continue
+    ; For Q-branch, don't include L>6 ; Note: was 3
+    if (dat[2] eq dat[3]) && ((float(dat[2])+float(dat[4])-1.5) gt 6) then continue
+   endif
    _w[i]=vac2air(1d8/double(dat[9]))
    _A[i]=double(dat[12])
    _E[i]=(double(dat[11])+double(dat[9]))*100 ; Need upper state energy, so add wavenumber to lower state energy, then convert to m^-1
