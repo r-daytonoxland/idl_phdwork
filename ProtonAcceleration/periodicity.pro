@@ -31,14 +31,15 @@ end
 pro getchonks, year, month, day, hour, min, sec, millisec, minsinchonk, totlength, startimes
 
 tt_mjs, year, month, day, hour, min, sec, millisec, mjs
-lensecs = totlength * 60
+; lensecs = totlength * 60
+
 secsinchonk = minsinchonk * 60
 
 nochonks = totlength/minsinchonk
 
 startimes = strarr(nochonks)
 
-for i=0,nochonks-1 do begin
+for i=0, nochonks[0]-1 do begin
 	startimemjs = mjs + (i*secsinchonk)
 	dat2str, startimemjs, startimestr, /other
 	startimes[i] = startimestr
