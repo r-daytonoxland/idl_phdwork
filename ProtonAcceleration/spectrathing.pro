@@ -24,7 +24,7 @@ totalchonks = 0
 a = size(years)
 len = a[1]
 
-for i = 0, 20 do begin
+for i = 0, len-10 do begin
 	getchonks, years[i], months[i], days[i], hours[i], mins[i], secs[i], msecs[i], 10, lens[i], startimes
 	b = size(startimes)
 	leng = b[1]
