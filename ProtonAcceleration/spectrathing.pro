@@ -52,6 +52,4 @@ spectrathing, years, months, days, hours, mins, secs, msecs, lens, spectrum
 
 save, spectrum, filename=savename
 
-return spectrum
-
 end
