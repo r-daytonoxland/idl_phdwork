@@ -21,7 +21,7 @@ Various IDL functions for the processing and analysis of data from Southampton's
 │   ├── dan_stuff.pro
 │   ├── file_reader.pro
 │   └── proton_heating.pro
-└── README.md
+└── README.mdx
 
 ## ProtonAcceleration
 Looking for periodicic signals in the intensity and energy of the proton emission profile
