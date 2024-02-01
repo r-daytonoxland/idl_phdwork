@@ -22,6 +22,13 @@ F = (A[1] * sp) + A[2]
 end
 
 
+pro crop, vector, cropped
+
+cropped = vector[70:401]
+
+end
+
+
 pro hpanel_fit, wl, sp, A, result
 ; Fitting function for the spectrum in the H panel
 ; Inputs
@@ -31,15 +38,15 @@ pro hpanel_fit, wl, sp, A, result
 ;       A is the fit parameters A[0] = Temperature, A[1] = Intensity, A[2] = Background
 ;       result is the fitted spectrum
 
-A = [200d, 0.05d, 0.005d]
+A = [200d, 50d, 5d]
 fita = [1, 1, 1]
 weights = fltarr(402) + 1
 
 ;step = fltarr(402) + 1
 ;step[200:280] = 0
 
-;crop, wl, wlc
-;crop, sp, spc
+crop, wl, wlc
+crop, sp, spc
 
 ;spc = spc*step
 
