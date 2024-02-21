@@ -53,7 +53,7 @@ F = (A[2] * sp1) + (A[3] * sp2) + A[4]
 end
 
 pro sp_func_o, X, A, F
-; Input function for fitting the combined spectrum in the OH panel
+; Input function for fitting the combined spectrum in the O+ panel
 ; Inputs
 ;       X is wl (the wavelengths of the panel)
 ;       A is the guess free parameters A[0] = Temperature, A[1] = Intensity, A[2] = Background
@@ -84,10 +84,10 @@ A = [200, 200, 0.01, 0.05, 0.002]  ; Guess inputs
 fita = [1, 1, 1, 1, 1]  ; Fit everything
 weights = fltarr(402) + 1  ; Don't weight
 
-crop, wl, wlc
-crop, sp, spc
+; crop, wl, wlc
+; crop, sp, spc
 
-result = curvefit(wlc, spc, weights, A, sigma, function_name='sp_func', /noderivative, itmax=100, /double, fita=fita)
+result = curvefit(wl, sp, weights, A, sigma, function_name='sp_func', /noderivative, itmax=100, /double, fita=fita)
 
 end
 
@@ -97,8 +97,8 @@ A = [200d, 0.05d, 0.0015d]
 fita = [1, 1, 1]
 weights = fltarr(402) + 1
 
-crop, wl, wlc
-crop, sp, spc
+; crop, wl, wlc
+; crop, sp, spc
 
 result = curvefit(wlc, spc, weights, A, sigma, function_name='sp_func_o', /noderivative, itmax=100, /double, fita=fita)
 
