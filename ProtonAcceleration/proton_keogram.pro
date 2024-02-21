@@ -4,7 +4,7 @@ pro proton_keogram, t1, length, keogram, fname
 ;
 ; Inputs:
 ;          t1 is the start time for the keogram, string of the form 'dd/mm/yyyy hh:mm:ss'
-;          length is the duration of the keogram in minutes
+;          length is the duration of the keogram in hours
 ; Outputs:
 ;          keogram is an array containing the final keogram data
 ;-------------------------------------------------------------------------------------------------------
