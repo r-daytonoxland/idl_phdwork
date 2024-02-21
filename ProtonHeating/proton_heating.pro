@@ -64,7 +64,7 @@ pro sp_func_o, X, A, F
 pnum = 2
 get_wlrange, pnum, wls
 
-synth_oh, wls, A[0], ohwl, ohint, width
+synth_oh, wls, A[0], ohwl, ohint, width, upperv=5
 convolve_sp, ohwl, ohint, 0.6d, X, sp
 
 F = (A[1] * sp) + A[2]
