@@ -64,14 +64,14 @@ pro sp_func_o, X, A, F
 pnum = 2
 get_wlrange, pnum, wls
 
-synth_oh, wls, A[0], ohwl, ohint, width, upperv=5
+synth_oh, wls, A[0], ohwl, ohint, width, upperv=8
 convolve_sp, ohwl, ohint, 0.6d, X, sp
 
 F = (A[1] * sp) + A[2]
 
 end
 
-pro ohpanel_fit, wl, sp, A, result
+pro ohpanel_fit, wl, sp, A, result, chisq=chisq
 ; Fits the two spectra for the oh panel separately
 ; Inputs
 ;       wl vector (402) : the wavelengths
@@ -87,11 +87,11 @@ weights = fltarr(402) + 1  ; Don't weight
 ; crop, wl, wlc
 ; crop, sp, spc
 
-result = curvefit(wl, sp, weights, A, sigma, function_name='sp_func', /noderivative, itmax=100, /double, fita=fita)
+result = curvefit(wl, sp, weights, A, sigma, function_name='sp_func', /noderivative, itmax=100, /double, fita=fita, chisq=chisq)
 
 end
 
-pro opanel_fit, wl, sp, A, result
+pro opanel_fit, wl, sp, A, result, chisq=chisq
 
 A = [200d, 0.05d, 0.0015d]
 fita = [1, 1, 1]
@@ -100,7 +100,7 @@ weights = fltarr(402) + 1
 ; crop, wl, wlc
 ; crop, sp, spc
 
-result = curvefit(wlc, spc, weights, A, sigma, function_name='sp_func_o', /noderivative, itmax=100, /double, fita=fita)
+result = curvefit(wl, sp, weights, A, sigma, function_name='sp_func_o', /noderivative, itmax=100, /double, fita=fita, chisq=chisq)
 
 end
 
@@ -160,13 +160,13 @@ av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512]) ; Mean
 if keyword_set(ohpanel) then begin
         spectra, 1, mjs0, time[0], av, sp
         get_w, mjs0, 1, wl
-        ohpanel_fit, wl, sp, A, result
+        ohpanel_fit, wl, sp, A, result, chisq=chisq
 endif
 
 if keyword_set(opanel) then begin
         spectra, 2, mjs0, time[0], av, sp
         get_w, mjs0, 2, wl
-        opanel_fit, wl, sp, A, result
+        opanel_fit, wl, sp, A, result, chisq=chisq
 endif
 
 end
