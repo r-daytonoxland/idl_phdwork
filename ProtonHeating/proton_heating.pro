@@ -144,7 +144,7 @@ blueshift = 6562.81 - centre
 
 end
 
-pro oh_fitting, mjs0, time, dseq, A, opanel=opanel, ohpanel=ohpanel
+pro oh_fitting, mjs0, time, dseq, A, opanel=opanel, ohpanel=ohpanel, chisq=chisq
 ; Gets the temperatures and intensities of the OH band in the O panel or the combined bands in the OH panel.
 ; Inputs
 ;       mjs0 (double) : Ths mjs value from read_tim
@@ -242,7 +242,7 @@ len = n_elements(start_times)
 fname_maker, start, 'allparams', interval_length, 'txt', fname_gen, lib=lib
 
 csvdat = fltarr(8, len)
-header = ['protonintensity', 'blueshift', 'oh82temp', 'oh82intensity', 'oh94temp', 'oh51temp', 'oh94intensity', 'oh51intensity']
+header = ['protonintensity', 'blueshift', 'oh82temp', 'oh82intensity', 'oh94temp', 'oh51temp', 'oh94intensity', 'oh51intensity', 'chisq_oh', 'chisq_o']
 
 for i = 0, len-1 do begin
         print, 'Reading tim...'
@@ -254,13 +254,13 @@ for i = 0, len-1 do begin
 
         proton_intensity, mjs0, dseq, intensity
         proton_blueshift, mjs0, dseq, blueshift
-        oh_fitting, mjs0, time, dseq, A, /opanel
-        oh_fitting, mjs0, time, dseq, B, /ohpanel
+        oh_fitting, mjs0, time, dseq, A, /opanel, chisq=chisqoh
+        oh_fitting, mjs0, time, dseq, B, /ohpanel, chisq=chisqo
 
         AA = A[0:1]
         BB = B[0:3]
 
-        csvdat[*, i] = [intensity, blueshift, AA, BB]
+        csvdat[*, i] = [intensity, blueshift, AA, BB, chisqoh, chisqo]
 
 endfor
 
