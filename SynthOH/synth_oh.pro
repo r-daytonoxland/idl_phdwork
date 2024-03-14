@@ -99,6 +99,7 @@ if n_elements(chadney) lt 1 then begin ; Use the newer coefficients
    i+=1
   endwhile
   close,lun
+  free_lun, lun
   if i gt 0 then begin
    _lab=_lab[0:i-1]
    _A=_A[0:i-1]
