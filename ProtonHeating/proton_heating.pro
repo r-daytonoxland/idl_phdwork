@@ -34,7 +34,7 @@ pro sp_func, X, A, F
 ; Input function for fitting the combined spectrum in the OH panel
 ; Inputs
 ;       X is wl (the wavelengths of the panel)
-;       A is the guess free parameters A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background
+;       A is the guess free parameters A[0] = Temperature, A[1] = Intensity1, A[2] = Intensity2, A[3] = Background
 ; Outputs
 ;       A is the updated parameters
 ;       F is the function y values
@@ -42,13 +42,13 @@ pro sp_func, X, A, F
 pnum = 1
 get_wlrange, pnum, wls
 
-synth_oh, wls, A[0], ohwl, ohint, width, upperv=9
+synth_oh, wls, 200d, ohwl, ohint, width, upperv=9
 convolve_sp, ohwl, ohint, 0.6d, X, sp1
 
-synth_oh, wls, A[1], ohwl, ohint, width, upperv=5
+synth_oh, wls, A[0], ohwl, ohint, width, upperv=5
 convolve_sp, ohwl, ohint, 0.6d, X, sp2
 
-F = (A[2] * sp1) + (A[3] * sp2) + A[4]
+F = (A[1] * sp1) + (A[2] * sp2) + A[3]
 
 end
 
@@ -80,7 +80,7 @@ pro ohpanel_fit, wl, sp, A, result, chisq=chisq
 ;       A vector (5) : the output free parameters A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background
 ;       result vector (402) : the output best fit model spectrum
 
-A = [200, 200, 0.01, 0.05, 0.002]  ; Guess inputs
+A = [200, 0.01, 0.05, 0.002]  ; Guess inputs
 fita = [1, 1, 1, 1, 1]  ; Fit everything
 weights = fltarr(402) + 1  ; Don't weight
 
@@ -239,10 +239,10 @@ intervals, datetime, interval_length, total_length, start_times
 
 len = n_elements(start_times)
 
-fname_maker, start, 'allparams', interval_length, 'txt', fname_gen, lib=lib
+fname_maker, start, 'allparams', interval_length, 'csv', fname_gen, lib=lib
 
-csvdat = fltarr(8, len)
-header = ['protonintensity', 'blueshift', 'oh82temp', 'oh82intensity', 'oh94temp', 'oh51temp', 'oh94intensity', 'oh51intensity', 'chisq_oh', 'chisq_o']
+csvdat = fltarr(10, len)
+header = ['mjs', 'protonintensity', 'blueshift', 'oh82temp', 'oh82intensity', 'oh51temp', 'oh94intensity', 'oh51intensity', 'chisq_oh', 'chisq_o']
 
 for i = 0, len-1 do begin
         print, 'Reading tim...'
@@ -258,9 +258,9 @@ for i = 0, len-1 do begin
         oh_fitting, mjs0, time, dseq, B, /ohpanel, chisq=chisqo
 
         AA = A[0:1]
-        BB = B[0:3]
+        BB = B[0:2]
 
-        csvdat[*, i] = [intensity, blueshift, AA, BB, chisqoh, chisqo]
+        csvdat[*, i] = [mjs0, intensity, blueshift, AA, BB, chisqoh, chisqo]
 
 endfor
 
