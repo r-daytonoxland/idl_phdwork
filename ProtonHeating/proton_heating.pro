@@ -203,8 +203,8 @@ pro intervals, datetime, interval_length, total_length, start_times
 ;Splits a longer time into intervals and returns the start of each interval in 'dd/mm/yyyy hh:mm:ss' format
 ; Inputs-
 ;       Datetime (array(integers)) : Output from extract_datetime, array with [year, month, day, hour, minute, second]
-;       interval_length (integer)  : Length of each interval in seconds
-;       total_length (integer)     : Length of total period of interest
+;       interval_length (double)  : Length of each interval in seconds
+;       total_length (double)     : Length of total period of interest
 ; Outputs-
 ;       start_times (array(string)): start of each interval in 'dd/mm/yyyy hh:mm:ss' format
 
