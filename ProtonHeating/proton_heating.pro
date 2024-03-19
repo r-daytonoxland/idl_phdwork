@@ -241,7 +241,7 @@ len = n_elements(start_times)
 
 fname_maker, start, 'allparams', interval_length, 'csv', fname_gen, lib=lib
 
-csvdat = fltarr(10, len)
+csvdat = strarr(10, len)
 header = ['mjs', 'protonintensity', 'blueshift', 'oh82temp', 'oh82intensity', 'oh51temp', 'oh94intensity', 'oh51intensity', 'chisq_oh', 'chisq_o']
 
 for i = 0, len-1 do begin
@@ -260,11 +260,12 @@ for i = 0, len-1 do begin
         AA = A[0:1]
         BB = B[0:2]
 
-        csvdat[*, i] = [mjs0, intensity, blueshift, AA, BB, chisqoh, chisqo]
+        csvdat[*, i] = [string(mjs0, form='(f14.3)'), string(intensity), string(blueshift), string(AA), string(BB), string(chisqoh), string(chisqo)]
 
 endfor
 
 write_csv, fname_gen, csvdat, header=header
+print, ('.csv written')
 
 end
 
