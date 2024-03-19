@@ -249,8 +249,8 @@ for i = 0, len-1 do begin
         read_tim, start_times[i], interval_length / 3600., mjs0, time, dseq, icount, /nophot, tadd = interval_length
 
         ; Need to reduce space_integrated to just one averaged spectrum
-        ;dseq = reform(total(dseq, 1), [1, 512, 512]) ; Mean
-        median = reform(median(dseq, dimension=1), [1, 512, 512]) ; Median
+        dseq = reform(total(dseq, 1), [1, 512, 512])/n_elements(time) ; Mean
+        ;median = reform(median(dseq, dimension=1), [1, 512, 512]) ; Median
 
         proton_intensity, mjs0, dseq, intensity
         proton_blueshift, mjs0, dseq, blueshift
