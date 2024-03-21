@@ -34,7 +34,7 @@ pro sp_func, X, A, F
 ; Input function for fitting the combined spectrum in the OH panel
 ; Inputs
 ;       X is wl (the wavelengths of the panel)
-;       A is the guess free parameters A[0] = Temperature, A[1] = Intensity1, A[2] = Intensity2, A[3] = Background
+;       A is the guess free parameters A[0] = Temperature, A[1] = Intensity1, A[2] = Intensity2, A[3] = Background, A[4] = pwv???
 ; Outputs
 ;       A is the updated parameters
 ;       F is the function y values
@@ -43,9 +43,11 @@ pnum = 1
 get_wlrange, pnum, wls
 
 synth_oh, wls, 200d, ohwl, ohint, width, upperv=9
+; ohint = pwv_absorption(A[4], ohwl) * ohint
 convolve_sp, ohwl, ohint, 0.6d, X, sp1
 
 synth_oh, wls, A[0], ohwl, ohint, width, upperv=5
+; ohint = pwv_absorption(A[4], ohwl) * ohint
 convolve_sp, ohwl, ohint, 0.6d, X, sp2
 
 F = (A[1] * sp1) + (A[2] * sp2) + A[3]
@@ -56,7 +58,7 @@ pro sp_func_o, X, A, F
 ; Input function for fitting the combined spectrum in the O+ panel
 ; Inputs
 ;       X is wl (the wavelengths of the panel)
-;       A is the guess free parameters A[0] = Temperature, A[1] = Intensity, A[2] = Background
+;       A is the guess free parameters A[0] = Temperature, A[1] = Intensity, A[2] = Background, A[3] = pwv
 ; Outputs
 ;       A is the updated parameters
 ;       F is the function y values
@@ -65,6 +67,7 @@ pnum = 2
 get_wlrange, pnum, wls
 
 synth_oh, wls, A[0], ohwl, ohint, width, upperv=8
+; ohint = pwv_absorption(A[3], ohwl) * ohint
 convolve_sp, ohwl, ohint, 0.6d, X, sp
 
 F = (A[1] * sp) + A[2]
@@ -80,7 +83,7 @@ pro ohpanel_fit, wl, sp, A, result, chisq=chisq
 ;       A vector (5) : the output free parameters A[0] = Temperature1, A[1] = Temperature2, A[2] = Intensity1, A[3] = Intensity2, A[4] = Background
 ;       result vector (402) : the output best fit model spectrum
 
-A = [200, 0.01, 0.05, 0.002]  ; Guess inputs
+A = [200, 0.01, 0.05, 0.002]  ; Guess inputs  ; [.. 10d]
 fita = [1, 1, 1, 1, 1]  ; Fit everything
 weights = fltarr(402) + 1  ; Don't weight
 
@@ -93,7 +96,7 @@ end
 
 pro opanel_fit, wl, sp, A, result, chisq=chisq
 
-A = [200d, 0.05d, 0.0015d]
+A = [200d, 0.05d, 0.0015d] ; [.. 10d]
 fita = [1, 1, 1]
 weights = fltarr(402) + 1
 
