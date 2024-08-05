@@ -14,3 +14,26 @@ wout = 1.0000000       201.00000       6556.9836     -0.34350718   0.00020035277
 
 ;Add H rest wavelength
 oplot, fltarr(2) + 6563, !y.crange
+
+;Continuum spectrum
+;timeframe 55-62 ON
+;timeframe 25-32 OFF
+read_tim, '03/01/2020 09:10:00', 10/60., mjs0, time, dseq, icount, /nophot
+proton_keogram, '03/01/2020 09:10:00', 10/60., keo, 'blah.png'
+on = reform(total(keo[55:62,*]/8., 1),[1,402])
+off = reform(total(keo[25:32,*]/8., 1),[1,402])
+get_w, mjs0, 3, wl
+plot, wl, on, yrange=[1000, 1006]
+oplot, wl, off
+
+;Do it using spectra
+read_tim, '03/01/2020 09:10:00', 10/60., mjs0, time, dseq, icount, /nophot
+
+on = dseq[550:620,*,*]
+on_dseq = reform(total(on,1)/80.,[1,512,512])
+off = dseq[250:320,*,*]
+off_dseq = reform(total(off,1)/80.,[1,512,512])
+
+spectra, 3, mjs0, time, on_dseq, sp_on
+spectra, 3, mjs0, time, off_dseq, sp_off
+get_w, mjs0, 3, wl
