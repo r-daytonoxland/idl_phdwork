@@ -1,0 +1,30 @@
+'01/01/2019 20:57:01' 20190101205701r1               #Katie's allsky frog, not in lora
+*** '02/03/2017 19:44:16' 20170302194416r1        21789  #From AuroraZoo Subject 75222198  Available 
+'22/12/2014 06:25:46' 20141222062546r1        2787   #From AuroraZoo Available
+'22/01/2020 22:01:07' 20200122220107r1        22649  #From AuroraZoo No data - am I sure this is the right time?
+'20/12/2014 19:13:40' 20141210191340r1               #Identified by Nick
+
+#
+zoop_str2frame,'HC2T441621789',mb,f
+print,mb,f
+
+# hsoft get_slit, gives you az and el
+get_slit, mjs, az, el, pnum=pnum, dda, dde, quiet=quiet
+
+#playing ask video
+frame=21710
+h_setup
+read_lut
+read_asklut
+read_vs, file = '20170302194416r1.txt'
+;play_video, range=[0,300]
+read_v, frame, im
+window, 1, xsi=256, ysi=256
+tv, bytscl(im, min=0, max=300)
+!p.position=[0,0,1,1]
+; To get mjs time for the HiTIES image..
+mjs=time_v(frame, /full)
+plot_slit, mjs, pnum=1, thick=3, color='red'
+
+#colour
+load_ct
