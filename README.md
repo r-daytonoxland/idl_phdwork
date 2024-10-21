@@ -2,6 +2,7 @@
 
 Various IDL functions for the processing and analysis of data from Southampton's HiTIES instrument
 
+```
 .
 ├── LICENSE
 ├── ProtonAcceleration
@@ -22,6 +23,7 @@ Various IDL functions for the processing and analysis of data from Southampton's
 │   ├── file_reader.pro
 │   └── proton_heating.pro
 └── README.mdx
+```
 
 ## ProtonAcceleration
 Looking for periodicic signals in the intensity and energy of the proton emission profile
