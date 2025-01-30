@@ -1,0 +1,18 @@
+'22/12/2014 06:25:46' 20141222062546r1        2787   #From AuroraZoo Available
+Best event so far
+
+Start
+frame  
+    2695
+mjs
+    2050381680.70000
+tt
+    2014          12          22           6          28          16           0
+
+Fin
+frame   
+    2828
+mjs 
+    2050381687.35000
+
+read_tim, '22/12/2014 06:28:15', 2/60., mjs0, time, dseq, icount, /nophot  ; taking like 8 years to run, getting stuck on get_time?

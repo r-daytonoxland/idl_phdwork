@@ -1,0 +1,9 @@
+'02/03/2017 19:44:16' 20170302194416r1        21789  #From AuroraZoo Subject 75222198  Available 
+
+Start
+frame
+    2169021
+
+End
+frame
+    21765
