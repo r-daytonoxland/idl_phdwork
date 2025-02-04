@@ -1,7 +1,7 @@
-*** '02/03/2017 19:44:16' 20170302194416r1        21789  #From AuroraZoo Subject 75222198  Available 
+*** '02/03/2017 19:44:16' 20170302194416r1        21789  #From AuroraZoo Subject 75222198  Available, doesn't cross slit
 '22/12/2014 06:25:46' 20141222062546r1        2787   #From AuroraZoo Available
 '22/01/2020 22:01:07' 20200122220107r1        22649  #From AuroraZoo No data - am I sure this is the right time?
-'20/12/2014 19:13:40' 20141210191340r1               #Identified by Nick
+'20/12/2014 19:13:40' 20141210191340r1               #Identified by Nick, no HiTIES
 
 #
 zoop_str2frame,'HC2T441621789',mb,f

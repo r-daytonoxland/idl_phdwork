@@ -24,4 +24,14 @@ background = ?
 
 if dseq is > e* background then?
 
+
+
+spectrae = fltarr(481, 240)
+
+for i=0,480 do begin
+    spectra, pnum, mjs0, time[i], dseq[i,*,*], sp
+    spectrae[i,*] = sp
+endfor
+
+read_tim, '22/12/2014 06:25:00', 2/60., mjs0, time, dseq, icount, /nophot
 av=reform(total(dseq,1)/double(n_elements(time)),[1,512,512])
