@@ -1,37 +1,23 @@
-; Conditional integration
+;read_tim, '22/12/2014 06:25:00', 5/60., mjs0, time, dseq, icount, /nophot
+;av=reform(total(dseq,1)/double(n_elements(time)),[1,512,512])
 
-; Read in FROG
-times = ['01/01/2019 20:57:01',
-        '02/03/2017 19:44:16', 
-        '22/12/2014 06:25:46',
-        '22/01/2020 22:01:07',
-        '20/12/2014 19:13:40']
-event_names=['A', 'B', 'C', 'D', 'E']
+; Use this to produce a spectrum for every time for each panel and export to Python
+pro spectra_time, pnum, mjs0, time, dseq, spt 
+    ; len(time)
+    a=size(time)
+    time_len=a[1]
+    ; len(wl)
+    get_w, mjs0, pnum, wl
+    b = size(wl)
+    wl_len = b[1]
+    ; create array with dimensions, time, wl
+    spt=fltarr(time_len, wl_len)
+    ; iterate over every time, produce spectrum and save
+    for i = 0,time_len-1 do begin
+        spectra, pnum, mjs0, time[i], dseq[i,*,*], sp
+        spt[i,*] = sp
+    endfor
+end
 
-i = 0
-read_tim, times[i], 20/60., mjs0, time, dseq, icount, /nophot
-save, mjs0, time, dseq, filename='FROG' + event_names[i] + 'data.sav'
-
-; Get right mjs start and end from some frogsinfo file
-
-;frog_present
-where is mjs start and mjs fin? find indexes
-mjz = mjs[start:fin]
-time = time[start:fin]
-dseq = dseq[start:fin, *, *]
-
-background = ?
-
-if dseq is > e* background then?
-
-
-
-spectrae = fltarr(481, 240)
-
-for i=0,480 do begin
-    spectra, pnum, mjs0, time[i], dseq[i,*,*], sp
-    spectrae[i,*] = sp
-endfor
-
-read_tim, '22/12/2014 06:25:00', 2/60., mjs0, time, dseq, icount, /nophot
-av=reform(total(dseq,1)/double(n_elements(time)),[1,512,512])
+write_csv, fname_gen, csvdat, header=header
+print, ('.csv written')
