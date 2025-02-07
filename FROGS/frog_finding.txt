@@ -1,5 +1,5 @@
 *** '02/03/2017 19:44:16' 20170302194416r1        21789  #From AuroraZoo Subject 75222198  Available, doesn't cross slit
-'22/12/2014 06:25:46' 20141222062546r2        2787   #From AuroraZoo Available
+'22/12/2014 06:25:46' 20141222062546r1        2787   #From AuroraZoo Available
 '22/01/2020 22:01:07' 20200122220107r1        22649  #From AuroraZoo No data - am I sure this is the right time?
 '20/12/2014 19:13:40' 20141210191340r1               #Identified by Nick, no HiTIES
 
@@ -14,8 +14,8 @@ get_slit, mjs, az, el, pnum=pnum, dda, dde, quiet=quiet
 h_setup
 read_lut
 read_asklut
-read_vs, file = '20141222062546r2.txt'
-play_video, range=[0,50]
+read_vs, file = '20141222062546r1.txt'
+play_video, range=[0,200], start=2500, end=3000
 
 frame=2780
 read_v, frame, im
