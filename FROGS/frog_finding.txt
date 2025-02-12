@@ -14,8 +14,11 @@ get_slit, mjs, az, el, pnum=pnum, dda, dde, quiet=quiet
 h_setup
 read_lut
 read_asklut
-read_vs, file = '20201212004954r1.txt'
+read_vs, file = '20141222062546r1.txt'
 play_video, range=[0,200]
+play_video, range=[0,200], start=2000, stop=3300, savepng='/home/rado1g21/idl/FROGS/20141222_vid'
+; start 2000 = 06:27:25.950
+; stop 3300 = 06:28:30.950
 
 frame=2780
 read_v, frame, im
