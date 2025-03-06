@@ -3,14 +3,17 @@
 ; 01/12/2014 00:00:00 sih-0-4 - oads of aurora aurora
 ; '22/11/2014 20:00:00' - no stars
 
-read_tim, '23/01/2015 17:00:00', 2., mjs0, time, dseq, icount, /nophot, tadd=10
+read_tim, '14/12/2015 00:00:00', 1., mjs0, time, dseq, icount, /nophot, tadd=10
 save, mjs0, time, dseq, filename='slit_calibration-0-6.sav'
 
 restore, filename='slit_calibration-0-6.sav', /verbose
 
-get_p,mjs0,dseq,1,panel1out
+get_p,mjs0,dseq,1,panel1out, /percentff
 slice_sp,panel1out,keoout
-keoscale=bytscl(keoout, min=0, max=100)
+keoscale=bytscl(keoout)
+window
+tvin, keoscale
+
 read_off_sih, mjs0, keoscale, 'sih-0-6.dat'
 
 ; Click on the right edge to move forward
