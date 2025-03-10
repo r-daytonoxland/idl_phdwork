@@ -2,7 +2,7 @@
 ;av=reform(total(dseq,1)/double(n_elements(time)),[1,512,512])
 
 ; Use this to produce a spectrum for every time for each panel and export to Python
-pro spectra_time, pnum, mjs0, time, dseq, spt 
+pro spectra_time, pnum, mjs0, time, dseq, wl, spt 
     ; len(time)
     a=size(time)
     time_len=a[1]
@@ -19,5 +19,4 @@ pro spectra_time, pnum, mjs0, time, dseq, spt
     endfor
 end
 
-write_csv, fname_gen, csvdat, header=header
-print, ('.csv written')
+;save, filename='frog_pnum.sav', wl, spt
