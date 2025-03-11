@@ -14,18 +14,18 @@ get_slit, mjs, az, el, pnum=pnum, dda, dde, quiet=quiet
 h_setup
 read_lut
 read_asklut
-read_vs, file = '20201212002926r1.txt'
-play_video, range=[0,200], step=5
-play_video, range=[0,200], start=1700, stop=2200, savepng='/home/rado1g21/idl/FROGS/20201211_2135_vid'
+read_vs, file = '20201211213707r1.txt'
+play_video, range=[0,200], step=2
+play_video, range=[0,200], start=1700, stop=3000, savepng='/home/rado1g21/idl/FROGS/20201211_2135_vid'
 ; start 2000 = 06:27:25.950
 ; stop 3300 = 06:28:30.950
 
 20201211213707r1
-start 1700
-end 3000
-frog 2200 (21:38:15.719)
+start 1700 (21:38:00.094)
+end 3000 (21:38:40.719)
+frog 2200 (21:38:08, 21:38:32)
 
-frame=2200
+frame=2000
 read_v, frame, im
 window, 1, xsi=256, ysi=256
 tv, bytscl(im, min=0, max=300)
@@ -33,6 +33,7 @@ tv, bytscl(im, min=0, max=300)
 ; To get mjs time for the HiTIES image..
 mjs=time_v(frame, /full)
 plot_slit, mjs, pnum=1, thick=3, colour=350
+; not plotting anything? pointing needs recalibrated?
 
 #colour
 load_ct
