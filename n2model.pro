@@ -31,15 +31,15 @@ PRO run_n2vk_model, Ts, wl3, sp3
 
     ; For Halpha panel
     ;21 6
-    convolve_sp, wl(wv_vk,6,21), int(int_vk,6,21), 0.6d, wl3, sp6_21
+    convolve_sp, wl(wv_vk,21,6), int(int_vk,21,6), 0.6d, wl3, sp6_21
     ;20 5
-    convolve_sp, wl(wv_vk,5,20), int(int_vk,5,20), 0.6d, wl3, sp5_20
+    convolve_sp, wl(wv_vk,20,5), int(int_vk,20,5), 0.6d, wl3, sp5_20
     ;18 2
-    convolve_sp, wl(wv_vk,2,18), int(int_vk,2,18), 0.6d, wl3, sp2_18
+    convolve_sp, wl(wv_vk,18,2), int(int_vk,18,2), 0.6d, wl3, sp2_18
     ;17 1
-    convolve_sp, wl(wv_vk,1,17), int(int_vk,1,17), 0.6d, wl3, sp1_17
+    convolve_sp, wl(wv_vk,17,1), int(int_vk,17,1), 0.6d, wl3, sp1_17
     ;16 0
-    convolve_sp, wl(wv_vk,0,16), int(int_vk,0,16), 0.6d, wl3, sp0_16
+    convolve_sp, wl(wv_vk,16,0), int(int_vk,16,0), 0.6d, wl3, sp0_16
 
     sp3 = [[sp6_21], [sp5_20], [sp2_18], [sp1_17], [sp0_16]]
 END
