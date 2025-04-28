@@ -364,31 +364,30 @@ end
 
 pro get_wlrange, pnum, wls
 
-if pnum eq 1 then begin
-     wls = [7900d, 8070d]
-endif
-if pnum eq 2 then begin
-     wls = [7280d, 7430d] 
-endif
-if pnum eq 3 then begin
-     wls = [6490d, 6660d] 
-endif
-
+        if pnum eq 1 then begin
+             wls = [7900d, 8070d]
+        endif
+        if pnum eq 2 then begin
+             wls = [7280d, 7430d] 
+        endif
+        if pnum eq 3 then begin
+             wls = [6490d, 6660d] 
+        endif
 end
 
 pro calibrate_panel, start_string, len, pnum, p0, wout
 
-get_wlrange, pnum, wls
+        get_wlrange, pnum, wls
 
-read_tim, start_string, len/60d, mjs0, time, dseq, /nophot
+        read_tim, start_string, len/60d, mjs0, time, dseq, /nophot
 
-av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512])
-spectra, pnum, mjs0, time[0], av, sp
-get_w, mjs0, pnum, wl
+        av = reform(total(dseq, 1) / double(n_elements(time)), [1, 512, 512])
+        spectra, pnum, mjs0, time[0], av, sp
+        get_w, mjs0, pnum, wl
 
-window, 10
-plot, wl, sp, title='Reference'
+        window, 10
+        plot, wl, sp, title='Reference'
 
-auto_wlcal, mjs0, time[0], av, pnum, wls[0], wls[1], p0, wout, /mid, ctype=1, hydroxyl=2
+        auto_wlcal, mjs0, time[0], av, pnum, wls[0], wls[1], p0, wout, /mid, ctype=1, hydroxyl=2
 
 end

@@ -1,4 +1,5 @@
-;read_tim, '22/12/2014 06:25:00', 5/60., mjs0, time, dseq, icount, /nophot
+;read_tim, '28/02/2020 02:30:00', 1., mjs0, time, dseq, icount, /nophot, tadd=2
+;read_tim, '31/12/2021 08:00:00', 2., mjs0, time, dseq, icount, /nophot, tadd=2
 ;av=reform(total(dseq,1)/double(n_elements(time)),[1,512,512])
 
 ; Use this to produce a spectrum for every time for each panel and export to Python
